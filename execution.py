@@ -36,14 +36,24 @@ class execution :
 		else
 			etats_suivants = self.automate.auto.image(etat, self.mot[position])
 			etat_suivant = 0
+			l_etats_suiv = len(etats_suivants)
 						
-			while( not(self.bool) and (etat_suivant<len(etats_suivants))):
+			while( not(self.bool) and (etat_suivant<l_etats_suiv)):
 				self.auxiliaire(etats_suivants[etat_suivant],position+1)
 				etat_suivant = etat_suivant+1
 				
 			if not(self.bool):
 				self.suite.pop()
-			
-				
+	
+	# la fonction d'execution :
+	def execute(self):
+	
+		etats_initiaux = self.automate.auto.initial
+		etat_init = 0
+		l_etats_init = len(etats_initiaux)
+						
+		while( not(self.bool) and (etat_init<l_etats_init)):
+			self.auxiliaire(etats_initiaux[etat_init],0)
+			etat_init = etat_init+1
 		
 	
