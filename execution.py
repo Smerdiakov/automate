@@ -13,28 +13,28 @@
 # (elle renvoie un booleen)
 # et la cas échéant va renvoyer la suite des états à visiter pour que le mot soit accepté.
 
-import automate
+from automate import *
 
 class execution :
 	def __init__(self, auto_arg, mot_arg):
-		self.automate.auto = auto_arg
+		self.auto = auto_arg
 		self.mot = mot_arg
-		self.suite = []
+		self.suite_etats = []
 		self.bool = False
 	
 	# sous-fonction auxiliaire récursive
 	def auxiliaire (self, etat, position):
 	
-		self.suite.append(etat)
+		self.suite_etats.append(etat)
 		
 		if (position == len(self.mot)):
-			if self.automate.auto.est_final(etat):
+			if self.auto.est_final(etat):
 				self.bool = True
-			else
-				self.suite.pop()
+			else:
+				self.suite_etats.pop()
 		
-		else
-			etats_suivants = self.automate.auto.image(etat, self.mot[position])
+		else:
+			etats_suivants = self.auto.image(etat, self.mot[position])
 			etat_suivant = 0
 			l_etats_suiv = len(etats_suivants)
 						
@@ -43,15 +43,15 @@ class execution :
 				etat_suivant = etat_suivant+1
 				
 			if not(self.bool):
-				self.suite.pop()
+				self.suite_etats.pop()
 	
 	# la fonction d'execution :
 	def execute(self):
 	
-		etats_initiaux = self.automate.auto.initial
+		etats_initiaux = self.auto.initial
 		etat_init = 0
 		l_etats_init = len(etats_initiaux)
-						
+		
 		while( not(self.bool) and (etat_init<l_etats_init)):
 			self.auxiliaire(etats_initiaux[etat_init],0)
 			etat_init = etat_init+1

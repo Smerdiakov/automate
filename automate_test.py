@@ -6,7 +6,7 @@ from automate import *
 import unittest
 import random
 
-class test_unitaire (unittest.TestCase):
+class test_automate (unittest.TestCase):
 
 	def test_ajoute_etat(self):
 		auto_test = automate()

@@ -161,8 +161,31 @@ class automate :
 
 # l'image d'un état par une lettre :
 	def image(self, depart, lettre):
-		return self.transition[depart][lettre]
-	
+		assert(depart in self.transition)
+		if lettre in self.transition[depart]:
+			return self.transition[depart][lettre]
+		else :
+			return[]
+
+# l'image d'une liste d'états par une lettre :
+	def image_liste(self, liste_depart, lettre):
+		liste_image=[]
+			for depart in liste_depart :
+				images = self.image(depart,lettre)
+				for etat in images :
+					liste_images.append(etat)
+		supprime_doublons(liste_image)
+		return liste_image
+
+# l'ensemble des etats que l'on peut atteindre par epsilon-transition :
+	def image_epsilon(self, depart):
+		liste_eps=[depart]
+		liste_eps_precedent=[]
+		while not(len(liste_eps)==len(liste_eps_precedent)):
+			liste_eps_precedent=liste_eps
+			liste_eps=self.image_liste(liste_eps,"")
+		return liste_eps
+
 # renvoie l'alphabet de l'automate :
 	def alphabet(self):
 		alph = set()
@@ -230,3 +253,15 @@ class automate :
 		self.ajoute_transition(4,2,"b")
 		self.ajoute_transition(4,3,"b")
 		self.ajoute_transition(2,4,"b")
+		
+		
+		
+# supprime les doublons d'une liste :
+def supprime_doublons(liste):
+	liste_ref=[]
+	for element in liste:
+		if not (element in liste_ref):
+			liste_ref.append(element)
+	liste = liste_ref
+	
+			
