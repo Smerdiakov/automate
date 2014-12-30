@@ -32,6 +32,19 @@ auto_ndet.ajoute_transition(1,1,"a")
 auto_ndet.ajoute_transition(1,1,"b")
 auto_ndet.ajoute_transition(2,3,"b")
 
+# cet automate à epsilon-transition reconnait les mot a*b* ou b*a*
+auto_eps = automate()
+auto_eps.ajoute_initial(1)
+auto_eps.ajoute_final(2)
+auto_eps.ajoute_initial(3)
+auto_eps.ajoute_final(4)
+auto_eps.ajoute_transition(1,1,"a")
+auto_eps.ajoute_transition(2,2,"b")
+auto_eps.ajoute_transition(3,3,"b")
+auto_eps.ajoute_transition(4,4,"a")
+auto_eps.ajoute_epsilon(1,2)
+auto_eps.ajoute_epsilon(3,4)
+
 longueur_mots = 900
 
 def mot_alea (liste_bits):
@@ -56,13 +69,36 @@ def nombre_de_zeros_mod_3 (liste_bits):
 			nombre = nombre +1
 	nombre = nombre % 3
 	return nombre
-	
+
+
+# pour vérifier la propriété de l'automate à epsilon-transitions	
+def propriete_3(chaine,lettre_ref):
+	booleen = True
+	booleen_b = False
+	for lettre in chaine :
+		if lettre==lettre_ref:
+			booleen_b = True
+		else:
+			if booleen_b:
+				booleen = False
+	return booleen
+				
+# pour créer des mots qui véirifent cette propriété :
+def liste_propriete_3(long):
+	bit = random.randint(0,1)
+	changement = random.randint(1,long-1)
+	liste = []
+	for entier in range(changement):
+		liste.append(bit)
+	for entier in range(long-changement):
+		liste.append(1-bit)
+	return liste
+		
+				
 class test_execution (unittest.TestCase):
 
 	def test_auto_det (self):
 		for test in range(100):
-			if (test % 2) == 0 :
-				print("  --> ", int(test/2), " % effectués")
 			liste = liste_bits_alea(longueur_mots)
 			mot = mot_alea(liste)
 			nombre = nombre_de_zeros_mod_3(liste)
@@ -75,8 +111,6 @@ class test_execution (unittest.TestCase):
 
 	def test_auto_ndet (self):
 		for test in range(100):
-			if (test % 2) == 0 :
-				print("  --> ", int(test/2)+50, " % effectués")
 			liste = liste_bits_alea(longueur_mots)
 			mot = mot_alea(liste)
 			execut = execution(auto_ndet,mot)
@@ -86,7 +120,24 @@ class test_execution (unittest.TestCase):
 			else : 
 				print("le test ne fonctionne pas pour ce mot : ")
 				print(mot)
-				assertTrue(((liste[longueur_mots-1]==0)or((liste[longueur_mots-1]==1)and(liste[longueur_mots-1]==1))) == execut.bool)
+				self.assertTrue(((liste[longueur_mots-1]==0)or((liste[longueur_mots-1]==1)and(liste[longueur_mots-1]==1))) == execut.bool)
+	
+	def test_auto_eps(self):
+		for test in range(100):
+			liste = []
+			if random.randint(0,1)==1:			
+				liste = liste_bits_alea(longueur_mots)
+			else:
+				liste = liste_propriete_3(longueur_mots)
+			mot = mot_alea(liste)
+			execut = execution(auto_eps,mot)
+			execut.execute()
+			if (((propriete_3(mot,"a"))or(propriete_3(mot,"b"))) == execut.bool):
+				pass
+			else : 
+				print("le test ne fonctionne pas pour ce mot : ")
+				print(mot)
+				self.assertTrue(((propriete_3(mot,"a"))or(propriete_3(mot,"b"))) == execut.bool)
 
 
 
