@@ -190,10 +190,10 @@ class test_automate (unittest.TestCase):
 	def test_supprime_lettre(self):
 		auto_test=automate()
 		auto_test.pour_le_test()
-		self.assertEqual(auto_test.nombre_transitions(),6)
+		self.assertEqual(auto_test.nombre_transitions(),7)
 		self.assertEqual(len(auto_test.alphabet()),2)
 		auto_test.supprime_lettre("a")
-		self.assertEqual(auto_test.nombre_transitions(),3)
+		self.assertEqual(auto_test.nombre_transitions(),4)
 		self.assertEqual(len(auto_test.alphabet()),1)
 		
 	def test_est_correct(self):
@@ -261,14 +261,61 @@ class test_automate (unittest.TestCase):
 	def test_nombre_transitions(self):
 		auto_test=automate()
 		auto_test.pour_le_test()
-		self.assertEqual(auto_test.nombre_transitions(),6)
+		self.assertEqual(auto_test.nombre_transitions(),7)
 	
 	def test_nombre_epsilon(self):
 		auto_test=automate()
 		auto_test.pour_le_test()
-		auto_test.ajoute_epsilon(1,4)
 		self.assertEqual(auto_test.nombre_epsilon(),1)
+		auto_test.ajoute_epsilon(1,4)
+		self.assertEqual(auto_test.nombre_epsilon(),2)
+	
+	def test_image_liste(self):
+		auto_test=automate()
+		auto_test.pour_le_test()
+		im_liste_1=auto_test.image_liste([1,2],"a")
+		im_liste_2=auto_test.image_liste([3,4],"b")
 		
+		self.assertTrue(2 in im_liste_1)
+		self.assertTrue(3 in im_liste_1)
+		self.assertFalse(1 in im_liste_1)
+		self.assertFalse(4 in im_liste_1)
+		
+		self.assertTrue(2 in im_liste_2)
+		self.assertTrue(3 in im_liste_1)
+		self.assertFalse(1 in im_liste_1)
+		self.assertFalse(4 in im_liste_1)
+		
+	def test_image_epsilon(self):
+		auto_test=automate()
+		auto_test.pour_le_test()
+		
+		im_eps=auto_test.image_epsilon(2)
+		self.assertTrue(1 in im_eps)
+		self.assertTrue(2 in im_eps)
+		self.assertFalse(3 in im_eps)
+		self.assertFalse(4 in im_eps)
+		
+		auto_test.ajoute_epsilon(1,3)
+		im_eps=auto_test.image_epsilon(2)
+		self.assertTrue(1 in im_eps)
+		self.assertTrue(2 in im_eps)
+		self.assertTrue(3 in im_eps)
+		self.assertFalse(4 in im_eps)
+		
+		auto_test.ajoute_epsilon(1,4)
+		im_eps=auto_test.image_epsilon(2)
+		self.assertTrue(1 in im_eps)
+		self.assertTrue(2 in im_eps)
+		self.assertTrue(3 in im_eps)
+		self.assertTrue(4 in im_eps)
+		
+		auto_test.ajoute_epsilon(3,2)
+		im_eps=auto_test.image_epsilon(2)
+		self.assertTrue(1 in im_eps)
+		self.assertTrue(2 in im_eps)
+		self.assertTrue(3 in im_eps)
+		self.assertTrue(4 in im_eps)
 		
 if __name__=="__main__":
 	print("\n")

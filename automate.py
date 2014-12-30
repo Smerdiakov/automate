@@ -9,6 +9,8 @@
 # 	le dictionnaire des transitions
 # l'etiquette d'une epsilon-transition sera le string vide
 
+from copy import *
+
 class automate :
 	def __init__(self):
 		self.initial=[]
@@ -170,11 +172,11 @@ class automate :
 # l'image d'une liste d'états par une lettre :
 	def image_liste(self, liste_depart, lettre):
 		liste_image=[]
-			for depart in liste_depart :
-				images = self.image(depart,lettre)
-				for etat in images :
-					liste_images.append(etat)
-		supprime_doublons(liste_image)
+		for depart in liste_depart :
+			images = self.image(depart,lettre)
+			for etat in images :
+				liste_image.append(etat)
+		liste_image=supprime_doublons(liste_image)
 		return liste_image
 
 # l'ensemble des etats que l'on peut atteindre par epsilon-transition :
@@ -182,8 +184,8 @@ class automate :
 		liste_eps=[depart]
 		liste_eps_precedent=[]
 		while not(len(liste_eps)==len(liste_eps_precedent)):
-			liste_eps_precedent=liste_eps
-			liste_eps=self.image_liste(liste_eps,"")
+			liste_eps_precedent=deepcopy(liste_eps) #copie profonde
+			liste_eps[len(liste_eps):]=self.image_liste(liste_eps,"")
 		return liste_eps
 
 # renvoie l'alphabet de l'automate :
@@ -191,7 +193,8 @@ class automate :
 		alph = set()
 		for depart in self.transition:
 			for lettre in self.transition[depart]:
-				alph=alph|set(lettre)
+				if not(lettre == ""):
+					alph=alph|set(lettre)
 		return alph
 
 # l'automate est-il déterministe ?
@@ -253,7 +256,7 @@ class automate :
 		self.ajoute_transition(4,2,"b")
 		self.ajoute_transition(4,3,"b")
 		self.ajoute_transition(2,4,"b")
-		
+		self.ajoute_transition(2,1,"")	
 		
 		
 # supprime les doublons d'une liste :
@@ -262,6 +265,6 @@ def supprime_doublons(liste):
 	for element in liste:
 		if not (element in liste_ref):
 			liste_ref.append(element)
-	liste = liste_ref
+	return liste_ref
 	
 			
