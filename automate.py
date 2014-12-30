@@ -183,9 +183,11 @@ class automate :
 	def image_epsilon(self, depart):
 		liste_eps=[depart]
 		liste_eps_precedent=[]
-		while not(len(liste_eps)==len(liste_eps_precedent)):
-			liste_eps_precedent=deepcopy(liste_eps) #copie profonde
-			liste_eps[len(liste_eps):]=self.image_liste(liste_eps,"")
+		while not(len(liste_eps)==len(liste_eps_precedent)):		
+			liste_eps_precedent=deepcopy(liste_eps) #copie profonde			
+			liste_eps[len(liste_eps):]=self.image_liste(liste_eps,"")						
+			liste_eps=supprime_doublons(liste_eps)
+		liste_eps.remove(depart)
 		return liste_eps
 
 # renvoie l'alphabet de l'automate :

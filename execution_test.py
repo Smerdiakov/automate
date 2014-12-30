@@ -56,12 +56,13 @@ def nombre_de_zeros_mod_3 (liste_bits):
 			nombre = nombre +1
 	nombre = nombre % 3
 	return nombre
+	
 class test_execution (unittest.TestCase):
 
 	def test_auto_det (self):
-		for test in range(1000):
-			if (test % 20) == 0 :
-				print("  --> ", int(test/20), " % effectués")
+		for test in range(100):
+			if (test % 2) == 0 :
+				print("  --> ", int(test/2), " % effectués")
 			liste = liste_bits_alea(longueur_mots)
 			mot = mot_alea(liste)
 			nombre = nombre_de_zeros_mod_3(liste)
@@ -73,9 +74,9 @@ class test_execution (unittest.TestCase):
 				self.assertNotEqual(nombre,0)
 
 	def test_auto_ndet (self):
-		for test in range(1000):
-			if (test % 20) == 0 :
-				print("  --> ", int(test/20)+50, " % effectués")
+		for test in range(100):
+			if (test % 2) == 0 :
+				print("  --> ", int(test/2)+50, " % effectués")
 			liste = liste_bits_alea(longueur_mots)
 			mot = mot_alea(liste)
 			execut = execution(auto_ndet,mot)
