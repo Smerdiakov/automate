@@ -13,16 +13,18 @@
 # (elle renvoie un booleen)
 # et la cas échéant va renvoyer la suite des états à visiter pour que le mot soit accepté.
 
+# utiliser un objet execution par automate 
+
 from automate import *
 
 class execution :
-	def __init__(self, auto_arg, mot_arg):
+	def __init__(self, auto_arg):
 	
 		# l'automate utilisé :
 		self.auto = auto_arg
 		
 		# le mot passé en argument :
-		self.mot = mot_arg
+		self.mot = ""
 		
 		# la suite des états a parcourir pour que le mot soit reconnu
 		self.suite_etats = []
@@ -66,7 +68,7 @@ class execution :
 		return ((not(self.bool)) and not(len(self.suite_etats)==0) and((len(self.suite_epsilon)==0) or (self.suite_epsilon[len(self.suite_epsilon)-1]==0)))
 			
 # la fonction d'execution (grosse et récursive):
-	def execute(self):
+	def exe(self):
 
 		# cas d'arrêt : on est à la fin du mot 	
 		if self.fin_de_mot():
@@ -78,7 +80,8 @@ class execution :
 			for etat in self.etats_possibles():
 				self.suite_etats.append(etat)
 				self.suite_epsilon.append(0)
-				self.execute()
+				self.exe()
+				
 				if self.bool : 
 					break
 				else:
@@ -91,17 +94,23 @@ class execution :
 				for etat in (self.auto.image_epsilon(self.etat_actuel())):
 					self.suite_etats.append(etat)
 					self.suite_epsilon.append(1)
-					self.execute()
+					self.exe()
 					if self.bool : 
 						break
 					else:
 						self.suite_etats.pop()
 						self.suite_epsilon.pop()
 			
-						
-			
+	# la fonction à appeler pour l'execution de l'automate :
+	def execute(self,mot_arg):
 		
+		self.mot = mot_arg
+		self.suite_etats = []
+		self.suite_epsilon = []
+		self.bool=False
 		
-		
+		self.exe()
+		if self.bool:
+			self.suite_epsilon.remove(0)
 			
 			

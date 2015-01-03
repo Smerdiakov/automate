@@ -292,28 +292,28 @@ class test_automate (unittest.TestCase):
 		
 		im_eps=auto_test.image_epsilon(2)
 		self.assertTrue(1 in im_eps)
-		self.assertTrue(2 in im_eps)
+		self.assertFalse(2 in im_eps)
 		self.assertFalse(3 in im_eps)
 		self.assertFalse(4 in im_eps)
 		
 		auto_test.ajoute_epsilon(1,3)
 		im_eps=auto_test.image_epsilon(2)
 		self.assertTrue(1 in im_eps)
-		self.assertTrue(2 in im_eps)
+		self.assertFalse(2 in im_eps)
 		self.assertTrue(3 in im_eps)
 		self.assertFalse(4 in im_eps)
 		
 		auto_test.ajoute_epsilon(1,4)
 		im_eps=auto_test.image_epsilon(2)
 		self.assertTrue(1 in im_eps)
-		self.assertTrue(2 in im_eps)
+		self.assertFalse(2 in im_eps)
 		self.assertTrue(3 in im_eps)
 		self.assertTrue(4 in im_eps)
 		
 		auto_test.ajoute_epsilon(3,2)
 		im_eps=auto_test.image_epsilon(2)
 		self.assertTrue(1 in im_eps)
-		self.assertTrue(2 in im_eps)
+		self.assertFalse(2 in im_eps)
 		self.assertTrue(3 in im_eps)
 		self.assertTrue(4 in im_eps)
 		
