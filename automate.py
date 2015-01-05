@@ -189,6 +189,19 @@ class automate :
 			liste_eps=supprime_doublons(liste_eps)
 		liste_eps.remove(depart)
 		return liste_eps
+		
+# un epsilon chemin d'un etat à un autre :
+# attention : faire un assert(arrive in image_epsilon) avant de l'utiliser
+# sinon : risques de boucles infinies
+	def epsilon_chemin(self, depart, arrive):
+		
+		
+		
+# auxiliaire de epsilon chemin
+	def auxiliaire(self,etat, liste, arrive):
+		if etat in liste :
+			return []
+		elif etat==arrive
 
 # renvoie l'alphabet de l'automate :
 	def alphabet(self):

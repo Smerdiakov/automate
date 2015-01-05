@@ -113,4 +113,14 @@ class execution :
 		if self.bool:
 			self.suite_epsilon.remove(0)
 			
+	def solution(self,mot_arg):
+		
+		self.execute(mot_arg)
+		liste_etats = []
+		
+		for indice in range(len(self.suite_etats)):
+			liste_etats.append(self.suite_etats[etat])
+			if ((etat<len(self.suite_epsilon)) and (self.suite_etats[etat]==1)):
+				
+			
 			
