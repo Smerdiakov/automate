@@ -4,13 +4,25 @@ from PyQt4 import QtGui,QtCore
 import sys
 import os
 
+
+def main():
+  print("main")
+
+
+if __name__ == '__main__': # pour eviter l'execution de la machine quand on lance l'éditeur
+   main()
+
+
+
 class Etat(QtGui.QGraphicsItemGroup):
-  def __init__(self,etiq,col,diam,final):
+  def __init__(self,etiq,col,diam,pos_x,pos_y,final):
     super(Etat,self).__init__(None)
   
     self.etiquette = etiq
     self.coleur = QtGui.QColor(col[0],col[1],col[2])
     self.diametre = diam
+    self.position_x = pos_x
+    self.position_y = pos_y
     self.est_final = final
     self.dessiner_cercle   
 
@@ -55,8 +67,8 @@ class Etat(QtGui.QGraphicsItemGroup):
   ### DESSINER FIGURE   
   def definir_configurations_graphiques(self):
     self.font  = QtGui.QFont("Arial",.5*self.diametre)
-    self.centre_x = 200.
-    self.centre_y = 200.
+    self.centre_x = self.position_x
+    self.centre_y = self.position_y
     self.position_externe_x = self.centre_x - self.diametre/2.
     self.position_externe_y = self.centre_y - self.diametre/2.
     self.position_interne_x = self.centre_x - .9*self.diametre/2.
@@ -130,9 +142,10 @@ class Graphe(QtGui.QGraphicsScene):
     super(Graphe,self).__init__(0,0,500,400)
 
     coleur = (255,255,255)
-    self.addItem(Etat("A",coleur,100,True))
-    self.addItem(Etat("1",coleur,80,False))
+    self.addItem(Etat("A",coleur,100,200,200,True))
+    self.addItem(Etat("1",coleur,80,100,150,False))
 
+    print ("sss")
 
 application = QtGui.QApplication(sys.argv)
 graphe = Graphe()
