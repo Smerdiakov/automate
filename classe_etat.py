@@ -47,7 +47,8 @@ class Etat(QtGui.QGraphicsItemGroup):
   def mousePressEvent(self, e):
     e.accept()
     self.setCursor(QtCore.Qt.ClosedHandCursor)
-
+    print(super(Etat,self))   
+ 
   def mouseReleaseEvent(self, e): 
     e.accept()
     self.setCursor(QtCore.Qt.OpenHandCursor)
