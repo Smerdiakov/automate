@@ -5,13 +5,21 @@ import sys
 import os
 
 
-def main():
-  print("main")
+
+if __name__ == '__main__':
+  main()
 
 
-if __name__ == '__main__': # pour eviter l'execution de la machine quand on lance l'éditeur
-   main()
+class Transition(QtGui.QGraphicsItemGroup):
+  def __init__(self,geometrie_droite):
+    super(Transition,self).__init__(None)
 
+    
+    self.fleche  = QtGui.QGraphicsLineItem(geometrie_droite[0],\
+                                           geometrie_droite[1],\
+                                           geometrie_droite[2],\
+                                           geometrie_droite[3])
+    self.addToGroup(self.fleche)
 
 
 class Etat(QtGui.QGraphicsItemGroup):
@@ -24,6 +32,9 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.position_x = pos_x
     self.position_y = pos_y
     self.est_final = final
+
+
+  def construire_etat(self):
     self.dessiner_cercle   
 
  
@@ -33,7 +44,7 @@ class Etat(QtGui.QGraphicsItemGroup):
  
     self.definir_configurations_graphiques()
     self.dessiner_cercle()
-    self.dessiner_button_taille()
+    #self.dessiner_button_taille()
 
   #### ITERACTIONS AVEC LA SOURIS
   def hoverEnterEvent(self, e): 
@@ -147,8 +158,10 @@ class Graphe(QtGui.QGraphicsScene):
 
     print ("sss")
 
-application = QtGui.QApplication(sys.argv)
-graphe = Graphe()
-visualisation_graphe = QtGui.QGraphicsView(graphe)
-visualisation_graphe.show()
-sys.exit(application.exec_())
+def main():
+  print("main")
+  application = QtGui.QApplication(sys.argv)
+  graphe = Graphe()
+  visualisation_graphe = QtGui.QGraphicsView(graphe)
+  visualisation_graphe.show()
+  sys.exit(application.exec_())
