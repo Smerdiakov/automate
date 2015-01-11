@@ -191,17 +191,28 @@ class automate :
 		return liste_eps
 		
 # un epsilon chemin d'un etat à un autre :
-# attention : faire un assert(arrive in image_epsilon) avant de l'utiliser
-# sinon : risques de boucles infinies
+
 	def epsilon_chemin(self, depart, arrive):
-		
+		assert(arrive in self.image_epsilon(depart))
+		return self.auxiliaire(depart,[],arrive)
 		
 		
 # auxiliaire de epsilon chemin
 	def auxiliaire(self,etat, liste, arrive):
 		if etat in liste :
 			return []
-		elif etat==arrive
+		elif etat==arrive:
+			return liste
+		else:
+			for etat_suivant in self.image(etat,""):
+				liste.append(etat)
+				if self.auxiliaire(etat_suivant,liste,arrive) ==[]:
+					liste.pop()
+				else :
+					return(liste)
+			
+				
+				
 
 # renvoie l'alphabet de l'automate :
 	def alphabet(self):

@@ -119,8 +119,13 @@ class execution :
 		liste_etats = []
 		
 		for indice in range(len(self.suite_etats)):
-			liste_etats.append(self.suite_etats[etat])
-			if ((etat<len(self.suite_epsilon)) and (self.suite_etats[etat]==1)):
+			if ((indice<len(self.suite_epsilon)) and (self.suite_epsilon[indice]==1)):
+				for etat in self.auto.epsilon_chemin(self.suite_etats[indice],self.suite_etats[indice+1]):
+					liste_etats.append(etat);
+					liste_etats.append("");
+			else:
+				liste_etats.append(self.suite_etats[indice])
 				
+		return liste_etats
 			
 			

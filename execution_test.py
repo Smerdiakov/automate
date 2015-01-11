@@ -46,7 +46,7 @@ auto_eps.ajoute_transition(4,4,"a")
 auto_eps.ajoute_epsilon(1,2)
 auto_eps.ajoute_epsilon(3,4)
 
-longueur_mots = 950
+longueur_mots = 95
 
 def mot_alea (liste_bits):
 	mot = ""
@@ -110,6 +110,7 @@ class test_execution (unittest.TestCase):
 		self.assertTrue(execut.bool)
 		self.assertEqual(execut.suite_etats,[1,2,2,2,3,3,1])
 		self.assertEqual(execut.suite_epsilon,[0,0,0,0,0,0])
+		self.assertEqual(execut.solution(mot_1),[1,2,2,2,3,3,1])
 		
 		execut.execute(mot_2)
 		self.assertFalse(execut.bool)
@@ -129,11 +130,13 @@ class test_execution (unittest.TestCase):
 		self.assertTrue(execut.bool)
 		self.assertEqual(execut.suite_etats,[1,1,1,1,1,2,3])
 		self.assertEqual(execut.suite_epsilon,[0,0,0,0,0,0])
+		self.assertEqual(execut.solution(mot_1),[1,1,1,1,1,2,3])
 		
 		execut.execute(mot_2)
 		self.assertTrue(execut.bool)
 		self.assertEqual(execut.suite_etats,[1,1,1,1,1,1,2])
 		self.assertEqual(execut.suite_epsilon,[0,0,0,0,0,0])
+		self.assertEqual(execut.solution(mot_2),[1,1,1,1,1,1,2])
 		
 		execut.execute(mot_3)
 		self.assertFalse(execut.bool)
@@ -154,11 +157,13 @@ class test_execution (unittest.TestCase):
 		self.assertTrue(execut.bool)
 		self.assertEqual(execut.suite_etats,[1,1,1,1,2,2,2,2])
 		self.assertEqual(execut.suite_epsilon,[0,0,0,1,0,0,0])
+		self.assertEqual(execut.solution(mot_1),[1,1,1,1,"",2,2,2,2])
 		
 		execut.execute(mot_2)
 		self.assertTrue(execut.bool)
 		self.assertEqual(execut.suite_etats,[3,3,3,4,4,4,4,4])
 		self.assertEqual(execut.suite_epsilon,[0,0,1,0,0,0,0])
+		self.assertEqual(execut.solution(mot_2),[3,3,3,"",4,4,4,4,4])
 		
 		execut.execute(mot_3)
 		self.assertFalse(execut.bool)
