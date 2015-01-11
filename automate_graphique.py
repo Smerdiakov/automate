@@ -6,7 +6,6 @@ from classe_etat import *
 from automate import automate
 import sys
 import os
-from math import sin,cos,atan,pi
 
 
 class Graphe(QtGui.QGraphicsScene):
@@ -36,32 +35,9 @@ class Graphe(QtGui.QGraphicsScene):
     for etat_initial in self.transition.keys():
      for lettre in self.transition[etat_initial].keys():
        etat_final = self.transition[etat_initial][lettre][0]
-       geometrie_droite = self.calculer_droite(etat_initial,etat_final)
-       self.transition[etat_initial][lettre].append(geometrie_droite)
-       dessin_transition = Transition(geometrie_droite,lettre)
+       dessin_transition = Transition(etat_initial,etat_final,lettre)
        self.fleches.append(dessin_transition)
        self.addItem(dessin_transition)
- 
-  def calculer_droite(self,etat_initial,etat_final):
-    geometrie = []
-    if etat_final.centre_x == etat_initial.centre_x:
-      inclination = pi/2.
-    else:
-      inclination = atan((etat_final.centre_y - etat_initial.centre_y)/ \
-                             (etat_final.centre_x - etat_initial.centre_x))
-    if etat_final.centre_x < etat_initial.centre_x:
-      inclination = inclination + pi
-    geometrie.append(etat_initial.centre_x + \
-                     etat_initial.diametre/2 * cos(inclination)) #x_initial
-    geometrie.append(etat_initial.centre_y + \
-                     etat_initial.diametre/2 * sin(inclination)) #y_initial
-    geometrie.append(etat_final.centre_x + \
-                     etat_final.diametre/2 * cos(inclination + pi)) #x_final
-    geometrie.append(etat_final.centre_y + \
-                     etat_final.diametre/2 * sin(inclination + pi)) #y_final
-    geometrie.append(inclination)
-    return geometrie
-
 
 
   # configurer la taille et la position des etats et les placer sur l'automate
@@ -106,6 +82,14 @@ class Graphe(QtGui.QGraphicsScene):
     for etat in self.etats:
       self.addItem(etat)
       etat.construire_etat()
+
+
+
+
+
+
+
+
 
 
 application = QtGui.QApplication(sys.argv)
