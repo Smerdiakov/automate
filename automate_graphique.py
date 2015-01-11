@@ -8,15 +8,15 @@ import sys
 import os
 from math import sin,cos,atan,pi
 
+
 class Graphe(QtGui.QGraphicsScene):
   def __init__(self,autom):
     super(Graphe,self).__init__(0,0,400,400)
 
+    self.automate = autom
     self.transition = autom.transition
-
     self.fleches = []
 
-    self.automate = autom
     self.cles_transition = []
     for cle in self.automate.transition.keys():
       self.cles_transition.append(cle)
@@ -32,12 +32,13 @@ class Graphe(QtGui.QGraphicsScene):
 
 
   def creer_fleches(self):
+    self.fleches = []
     for etat_initial in self.transition.keys():
      for lettre in self.transition[etat_initial].keys():
        etat_final = self.transition[etat_initial][lettre][0]
        geometrie_droite = self.calculer_droite(etat_initial,etat_final)
        self.transition[etat_initial][lettre].append(geometrie_droite)
-       dessin_transition = Transition(geometrie_droite)
+       dessin_transition = Transition(geometrie_droite,lettre)
        self.fleches.append(dessin_transition)
        self.addItem(dessin_transition)
  
@@ -58,10 +59,9 @@ class Graphe(QtGui.QGraphicsScene):
                      etat_final.diametre/2 * cos(inclination + pi)) #x_final
     geometrie.append(etat_final.centre_y + \
                      etat_final.diametre/2 * sin(inclination + pi)) #y_final
-    print(etat_initial.etiquette)
-    print(etat_final.etiquette)
-    print(inclination/pi)
+    geometrie.append(inclination)
     return geometrie
+
 
 
   # configurer la taille et la position des etats et les placer sur l'automate
@@ -76,8 +76,9 @@ class Graphe(QtGui.QGraphicsScene):
     for etat in self.automate.final:
       etat.est_final = True
 
-#    for etat in self.etats:
+    for etat in self.etats:
 #      etat.diametre = self.diametre_etat
+      etat.graphe.append(self)       
       
 #    for etat in self.automate.initial:
 #      etat.position_x = self.position_etat
