@@ -119,7 +119,7 @@ class Etat(QtGui.QGraphicsItemGroup):
     e.accept()
     self.setCursor(QtCore.Qt.OpenHandCursor)
     self.actualiser_geometrie()
-    self.graphe[0].creer_fleches()
+    self.graphe[0].placer_fleches()
 
 
   ### DESSINER FIGURE   
