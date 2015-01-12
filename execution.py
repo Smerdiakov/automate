@@ -7,22 +7,32 @@
 
 # la classe va prendre comme arguments :
 #	- l'automate
-#	- le mot avec lequel on va executer l'automate.
 
 # la classe automate doit vérifier si le mot est reconnu par l'automate 
 # (elle renvoie un booleen)
 # et la cas échéant va renvoyer la suite des états à visiter pour que le mot soit accepté.
 
+# utiliser un objet execution par automate (éviter de réutiliser un objet execution pour 2 automates)
+
+# LA FONCTION A UTILISER EST LA METHODE solution() !
+# elle est tout à la fin.
+# il suffit de déclarer une classe execution ( une classe execution par automate !)
+# et lancer la methode solution avec le mot souhaité en argument.
+# le booléen self.bool nous dit si le mot est reconnu par l'automate ou non.
+# la fonction renvoie ensuite la liste  des états suivi par le mot dans l'automate.
+# si l'état est précédé par "" dans la liste, cela signifie que la transition 
+# empruntée est une epsilon-transition.
+
 from automate import *
 
 class execution :
-	def __init__(self, auto_arg, mot_arg):
+	def __init__(self, auto_arg):
 	
 		# l'automate utilisé :
 		self.auto = auto_arg
 		
 		# le mot passé en argument :
-		self.mot = mot_arg
+		self.mot = ""
 		
 		# la suite des états a parcourir pour que le mot soit reconnu
 		self.suite_etats = []
@@ -65,8 +75,9 @@ class execution :
 	def tentative_epsilon(self) :
 		return ((not(self.bool)) and not(len(self.suite_etats)==0) and((len(self.suite_epsilon)==0) or (self.suite_epsilon[len(self.suite_epsilon)-1]==0)))
 			
-# la fonction d'execution (grosse et récursive):
-	def execute(self):
+# la fonction d'execution grosse et récursive :
+# (ne pas toucher, c'est pas pour les enfants)
+	def exe(self):
 
 		# cas d'arrêt : on est à la fin du mot 	
 		if self.fin_de_mot():
@@ -78,7 +89,8 @@ class execution :
 			for etat in self.etats_possibles():
 				self.suite_etats.append(etat)
 				self.suite_epsilon.append(0)
-				self.execute()
+				self.exe()
+				
 				if self.bool : 
 					break
 				else:
@@ -91,17 +103,47 @@ class execution :
 				for etat in (self.auto.image_epsilon(self.etat_actuel())):
 					self.suite_etats.append(etat)
 					self.suite_epsilon.append(1)
-					self.execute()
+					self.exe()
 					if self.bool : 
 						break
 					else:
 						self.suite_etats.pop()
 						self.suite_epsilon.pop()
 			
-						
+	# la fonction à appeler pour l'execution de l'automate :
+	def execute(self,mot_arg):
+		
+		self.mot = mot_arg
+		self.suite_etats = []
+		self.suite_epsilon = []
+		self.bool=False
+		
+		self.exe()
+		if self.bool:
+			self.suite_epsilon.remove(0)
 			
+# LA FONCTION A UTILISER !
+# il suffit de déclarer une classe execution ( une classe execution par automate !)
+# et lancer la methode solution avec le mot souhaité en argument.
+# le booléen self.bool nous dit si le mot est reconnu par l'automate ou non.
+# la fonction renvoie ensuite la liste  des états suivi par le mot dans l'automate.
+# si l'état est précédé par "", cela signifie que la transition empruntée est une
+# epsilon-transition.
+
+	def solution(self,mot_arg):
 		
+		self.execute(mot_arg)
+		liste_etats = []
 		
-		
+		if self.bool :
+			for indice in range(len(self.suite_etats)):
+				if ((indice<len(self.suite_epsilon)) and (self.suite_epsilon[indice]==1)):
+					for etat in self.auto.epsilon_chemin(self.suite_etats[indice],self.suite_etats[indice+1]):
+						liste_etats.append(etat);
+						liste_etats.append("");
+				else:
+					liste_etats.append(self.suite_etats[indice])
+				
+		return liste_etats
 			
 			

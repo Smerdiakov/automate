@@ -226,6 +226,17 @@ class test_automate (unittest.TestCase):
 		self.assertFalse(4 in auto_test.image(1,"a"))
 		self.assertFalse(1 in auto_test.image(2,"b"))
 		
+	def test_epsilon_chemin(self):
+		auto_test=automate()
+		auto_test.pour_le_test()
+		auto_test.ajoute_epsilon(1,2);
+		auto_test.ajoute_epsilon(2,3);
+		auto_test.ajoute_epsilon(3,4);
+		auto_test.ajoute_epsilon(4,1);
+		self.assertEqual(auto_test.epsilon_chemin(1,2), [1])
+		self.assertEqual(auto_test.epsilon_chemin(1,3), [1,2])
+		self.assertEqual(auto_test.epsilon_chemin(1,4), [1,2,3])
+		
 	def test_alphabet(self):
 		auto_test=automate()
 		auto_test.pour_le_test()
@@ -292,28 +303,28 @@ class test_automate (unittest.TestCase):
 		
 		im_eps=auto_test.image_epsilon(2)
 		self.assertTrue(1 in im_eps)
-		self.assertTrue(2 in im_eps)
+		self.assertFalse(2 in im_eps)
 		self.assertFalse(3 in im_eps)
 		self.assertFalse(4 in im_eps)
 		
 		auto_test.ajoute_epsilon(1,3)
 		im_eps=auto_test.image_epsilon(2)
 		self.assertTrue(1 in im_eps)
-		self.assertTrue(2 in im_eps)
+		self.assertFalse(2 in im_eps)
 		self.assertTrue(3 in im_eps)
 		self.assertFalse(4 in im_eps)
 		
 		auto_test.ajoute_epsilon(1,4)
 		im_eps=auto_test.image_epsilon(2)
 		self.assertTrue(1 in im_eps)
-		self.assertTrue(2 in im_eps)
+		self.assertFalse(2 in im_eps)
 		self.assertTrue(3 in im_eps)
 		self.assertTrue(4 in im_eps)
 		
 		auto_test.ajoute_epsilon(3,2)
 		im_eps=auto_test.image_epsilon(2)
 		self.assertTrue(1 in im_eps)
-		self.assertTrue(2 in im_eps)
+		self.assertFalse(2 in im_eps)
 		self.assertTrue(3 in im_eps)
 		self.assertTrue(4 in im_eps)
 		
