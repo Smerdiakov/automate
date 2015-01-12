@@ -13,18 +13,35 @@ class Transition(QtGui.QGraphicsItemGroup):
   def __init__(self,etat_initial,etat_final,lettre):
     super(Transition,self).__init__(None)
 
-
-
-    self.style_ligne = QtGui.QPen()
-    self.style_ligne.setWidth(2)
- 
     self.lettre = lettre
+    self.depart = etat_initial
+    self.arrivee = etat_final
  
-    if etat_initial == etat_final:
-      self.dessiner_fleche_circulaire(etat_initial)
-    else:
-      geometrie_droite = self.calculer_droite(etat_initial,etat_final) 
-      self.dessiner_fleche_droite(geometrie_droite,lettre)
+    self.dessiner_fleche()
+
+  def dessiner_fleche(self):
+
+     self.style_ligne = QtGui.QPen()
+     self.style_ligne.setWidth(2)
+     self.font  = QtGui.QFont("Arial",14)
+
+     self.texte_fleche = QtGui.QGraphicsSimpleTextItem(self.lettre)
+
+     if self.depart == self.arrivee:
+        self.dessiner_fleche_circulaire(self.depart)
+     else:
+        geometrie_droite = self.calculer_droite(self.depart,self.arrivee) 
+        self.dessiner_fleche_droite(geometrie_droite)
+
+     self.fleche.setPen(self.style_ligne)
+     self.tete1.setPen(self.style_ligne)
+     self.tete2.setPen(self.style_ligne)
+     self.texte_fleche.setFont(self.font)     
+
+     self.addToGroup(self.fleche)
+     self.addToGroup(self.tete1)
+     self.addToGroup(self.tete2)
+     self.addToGroup(self.texte_fleche)
 
   def dessiner_fleche_circulaire(self,etat):
       ## corps de la fleche 
@@ -33,69 +50,41 @@ class Transition(QtGui.QGraphicsItemGroup):
                                                 etat.diametre,etat.diametre) 
       self.fleche.setStartAngle(-16*30) 
       self.fleche.setSpanAngle(16*240)
-
-      
+    
       ## tete de la fleche
       tete_initial_x = etat.centre_x + etat.diametre/2.*cos(pi/6.)
-      tete_initial_y = etat.centre_y + etat.diametre/2.*sin(pi/6.)
+      tete_initial_y = etat.centre_y - etat.diametre/2.*sin(pi/6.)
+      inclination = -pi/3
+      self.dessiner_tete_fleche(tete_initial_x,tete_initial_y,inclination)
 
+      # texte de la fleche
+      position_texte_x = etat.centre_x
+      position_texte_y = etat.centre_y - 1.5*etat.diametre
+      self.texte_fleche.setPos(position_texte_x,position_texte_y)
 
-      self.fleche.setPen(self.style_ligne) 
-      self.addToGroup(self.fleche)
-
-  def dessiner_fleche_droite(self,geometrie_droite,lettre):    
+  def dessiner_fleche_droite(self,geometrie_droite):    
       ## corps de la fleche 
       self.fleche  = QtGui.QGraphicsLineItem(geometrie_droite[0],geometrie_droite[1],\
                                            geometrie_droite[2],geometrie_droite[3])
 
       # tete de la fleche
       inclination = geometrie_droite[4]+pi
-      longueur_tete = 15
-      ouverture_tete = pi/6
-
-
       tete_initial_x = geometrie_droite[2]
       tete_initial_y = geometrie_droite[3]
       self.dessiner_tete_fleche(tete_initial_x,tete_initial_y,inclination)
-      #tete_final_x_1 = tete_initial_x +\
-      #                 longueur_tete*cos(inclination+ouverture_tete)
-      #tete_final_y_1 = tete_initial_y +\
-      #                 longueur_tete*sin(inclination+ouverture_tete)
-      #tete_final_x_2 = tete_initial_x +\
-      #                 longueur_tete*cos(inclination-ouverture_tete)
-      #tete_final_y_2 = tete_initial_y +\
-      #                 longueur_tete*sin(inclination-ouverture_tete) 
- 
-      #self.tete1  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
-      #                                      tete_final_x_1,tete_final_y_1)
-      #self.tete2  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
-      #                                      tete_final_x_2,tete_final_y_2)
-
 
       # texte de la fleche
-      moyenne_x = 0.5*(geometrie_droite[0] + geometrie_droite[2])
-      moyenne_y = 0.5*(geometrie_droite[1] + geometrie_droite[3])
-      position_texte_x = moyenne_x + 15*cos(inclination+pi/2)
-      position_texte_y = moyenne_y + 15*sin(inclination+pi/2)
-      self.texte_fleche = QtGui.QGraphicsSimpleTextItem(lettre)
+      position_texte_x = 0.5*(geometrie_droite[0] + geometrie_droite[2]) +\
+                         20*cos(inclination+pi/2)
+      position_texte_y =  0.5*(geometrie_droite[1] + geometrie_droite[3]) +\
+                         20*sin(inclination+pi/2)
       self.texte_fleche.setPos(position_texte_x,position_texte_y)
-
-
-      self.fleche.setPen(self.style_ligne)
-      self.tete1.setPen(self.style_ligne)
-      self.tete2.setPen(self.style_ligne)
-
-      self.addToGroup(self.fleche)
-      self.addToGroup(self.tete1)
-      self.addToGroup(self.tete2)
-      self.addToGroup(self.texte_fleche)
 
 
   def dessiner_tete_fleche(self,tete_initial_x,tete_initial_y,inclination):
 
       longueur_tete = 15
       ouverture_tete = pi/6
-
 
       tete_final_x_1 = tete_initial_x +\
                        longueur_tete*cos(inclination+ouverture_tete)
@@ -111,10 +100,6 @@ class Transition(QtGui.QGraphicsItemGroup):
       self.tete2  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
                                             tete_final_x_2,tete_final_y_2)
 
- 
-  
-
-
   def calculer_droite(self,etat_initial,etat_final):
     geometrie = []
     if etat_final.centre_x == etat_initial.centre_x:
@@ -124,6 +109,7 @@ class Transition(QtGui.QGraphicsItemGroup):
                              (etat_final.centre_x - etat_initial.centre_x))
     if etat_final.centre_x < etat_initial.centre_x:
       inclination = inclination + pi
+
     geometrie.append(etat_initial.centre_x + \
                      etat_initial.diametre/2 * cos(inclination)) #x_initial
     geometrie.append(etat_initial.centre_y + \
@@ -133,6 +119,7 @@ class Transition(QtGui.QGraphicsItemGroup):
     geometrie.append(etat_final.centre_y + \
                      etat_final.diametre/2 * sin(inclination + pi)) #y_final
     geometrie.append(inclination)
+
     return geometrie
 
 
@@ -201,7 +188,8 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.position_x = self.position_initial_x + self.x()
     self.position_y = self.position_initial_y + self.y()
     self.definir_configurations_graphiques()
- 
+
+##
   def dessiner_cercle(self):
     self.cercle_ext = QtGui.QGraphicsEllipseItem(QtCore.QRectF(\
                             self.position_externe_x,self.position_externe_y,\
@@ -210,8 +198,9 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.cercle_ext.setOpacity(0.3)
     self.cercle_ext.setAcceptHoverEvents(True)
     self.addToGroup(self.cercle_ext)
-
-    if self.est_final:
+  
+    ## etat final --> deux cercles
+    if self.est_final: 
       self.cercle_int = QtGui.QGraphicsEllipseItem(QtCore.QRectF(\
                               self.position_interne_x,self.position_interne_y,\
                               .9*self.diametre,.9*self.diametre))
