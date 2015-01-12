@@ -33,12 +33,13 @@ class Graphe(QtGui.QGraphicsScene):
 
   def placer_fleches(self):
     self.fleches = []
-    for etat_initial in self.transition.keys():
-     for lettre in self.transition[etat_initial].keys():
-       etat_final = self.transition[etat_initial][lettre][0]
-       dessin_transition = Transition(etat_initial,etat_final,lettre)
+    for depart in self.transition.keys():
+     for lettre in self.transition[depart].keys():
+       [arrivee] = self.automate.image(depart,lettre)
+       dessin_transition = Transition(depart,arrivee,lettre)
        self.fleches.append(dessin_transition)
        self.addItem(dessin_transition)
+
 
 
   def identifier_precedents_successeurs(self):
@@ -50,8 +51,9 @@ class Graphe(QtGui.QGraphicsScene):
     for depart in self.transition.keys():
       for lettre in self.transition[depart].keys():
         [arrivee] = self.automate.image(depart,lettre)
-        preced[arrivee].append(depart)
-        succes[depart].append(arrivee)
+        if arrivee != depart:
+          preced[arrivee].append(depart)
+          succes[depart].append(arrivee)
     return [preced,succes]
 
 
@@ -91,6 +93,7 @@ class Graphe(QtGui.QGraphicsScene):
                        break
                if precedents_places:
                    for precedent in precedents_etat[etat]:
+                       assert(precedent in successeurs_etat.keys())
                        etat.position_initial_x = max([etat.position_initial_x,
                                                      precedent.position_initial_x + self.distance_etats])
                        nombre_etats_niveau = len(successeurs_etat[precedent]) 
@@ -143,6 +146,7 @@ autom.ajoute_transition(etat3,etat0,'a')
 autom.ajoute_transition(etat0,etat1,'b')
 autom.ajoute_transition(etat1,etat2,'c')
 autom.ajoute_transition(etat0,etat4,'d')
+autom.ajoute_transition(etat1,etat1,'e')
 autom.final.append(etat2)
 autom.final.append(etat4)
 
