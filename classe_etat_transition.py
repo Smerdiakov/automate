@@ -13,56 +13,106 @@ class Transition(QtGui.QGraphicsItemGroup):
   def __init__(self,etat_initial,etat_final,lettre):
     super(Transition,self).__init__(None)
 
-    style_ligne = QtGui.QPen()
-    style_ligne.setWidth(2)
-  
-
-    geometrie_droite = self.calculer_droite(etat_initial,etat_final) 
 
 
-    # corps de la fleche 
-    self.fleche  = QtGui.QGraphicsLineItem(geometrie_droite[0],geometrie_droite[1],\
+    self.style_ligne = QtGui.QPen()
+    self.style_ligne.setWidth(2)
+ 
+    self.lettre = lettre
+ 
+    if etat_initial == etat_final:
+      self.dessiner_fleche_circulaire(etat_initial)
+    else:
+      geometrie_droite = self.calculer_droite(etat_initial,etat_final) 
+      self.dessiner_fleche_droite(geometrie_droite,lettre)
+
+  def dessiner_fleche_circulaire(self,etat):
+      ## corps de la fleche 
+      self.fleche  = QtGui.QGraphicsEllipseItem(etat.position_externe_x,\
+                                                etat.position_externe_y - etat.diametre/2.,\
+                                                etat.diametre,etat.diametre) 
+      self.fleche.setStartAngle(-16*30) 
+      self.fleche.setSpanAngle(16*240)
+
+      
+      ## tete de la fleche
+      tete_initial_x = etat.centre_x + etat.diametre/2.*cos(pi/6.)
+      tete_initial_y = etat.centre_y + etat.diametre/2.*sin(pi/6.)
+
+
+      self.fleche.setPen(self.style_ligne) 
+      self.addToGroup(self.fleche)
+
+  def dessiner_fleche_droite(self,geometrie_droite,lettre):    
+      ## corps de la fleche 
+      self.fleche  = QtGui.QGraphicsLineItem(geometrie_droite[0],geometrie_droite[1],\
                                            geometrie_droite[2],geometrie_droite[3])
 
-    # tete de la fleche
-    inclination = geometrie_droite[4]+pi
-    longueur_tete = 15
-    ouverture_tete = pi/6
+      # tete de la fleche
+      inclination = geometrie_droite[4]+pi
+      longueur_tete = 15
+      ouverture_tete = pi/6
 
-    tete_initial_x = geometrie_droite[2]
-    tete_initial_y = geometrie_droite[3]
-    tete_final_x_1 = tete_initial_x +\
-                     longueur_tete*cos(inclination+ouverture_tete)
-    tete_final_y_1 = tete_initial_y +\
-                     longueur_tete*sin(inclination+ouverture_tete)
-    tete_final_x_2 = tete_initial_x +\
-                     longueur_tete*cos(inclination-ouverture_tete)
-    tete_final_y_2 = tete_initial_y +\
-                     longueur_tete*sin(inclination-ouverture_tete) 
+
+      tete_initial_x = geometrie_droite[2]
+      tete_initial_y = geometrie_droite[3]
+      self.dessiner_tete_fleche(tete_initial_x,tete_initial_y,inclination)
+      #tete_final_x_1 = tete_initial_x +\
+      #                 longueur_tete*cos(inclination+ouverture_tete)
+      #tete_final_y_1 = tete_initial_y +\
+      #                 longueur_tete*sin(inclination+ouverture_tete)
+      #tete_final_x_2 = tete_initial_x +\
+      #                 longueur_tete*cos(inclination-ouverture_tete)
+      #tete_final_y_2 = tete_initial_y +\
+      #                 longueur_tete*sin(inclination-ouverture_tete) 
  
-    self.tete1  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
-                                          tete_final_x_1,tete_final_y_1)
-    self.tete2  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
-                                          tete_final_x_2,tete_final_y_2)
+      #self.tete1  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
+      #                                      tete_final_x_1,tete_final_y_1)
+      #self.tete2  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
+      #                                      tete_final_x_2,tete_final_y_2)
 
+
+      # texte de la fleche
+      moyenne_x = 0.5*(geometrie_droite[0] + geometrie_droite[2])
+      moyenne_y = 0.5*(geometrie_droite[1] + geometrie_droite[3])
+      position_texte_x = moyenne_x + 15*cos(inclination+pi/2)
+      position_texte_y = moyenne_y + 15*sin(inclination+pi/2)
+      self.texte_fleche = QtGui.QGraphicsSimpleTextItem(lettre)
+      self.texte_fleche.setPos(position_texte_x,position_texte_y)
+
+
+      self.fleche.setPen(self.style_ligne)
+      self.tete1.setPen(self.style_ligne)
+      self.tete2.setPen(self.style_ligne)
+
+      self.addToGroup(self.fleche)
+      self.addToGroup(self.tete1)
+      self.addToGroup(self.tete2)
+      self.addToGroup(self.texte_fleche)
+
+
+  def dessiner_tete_fleche(self,tete_initial_x,tete_initial_y,inclination):
+
+      longueur_tete = 15
+      ouverture_tete = pi/6
+
+
+      tete_final_x_1 = tete_initial_x +\
+                       longueur_tete*cos(inclination+ouverture_tete)
+      tete_final_y_1 = tete_initial_y +\
+                       longueur_tete*sin(inclination+ouverture_tete)
+      tete_final_x_2 = tete_initial_x +\
+                       longueur_tete*cos(inclination-ouverture_tete)
+      tete_final_y_2 = tete_initial_y +\
+                       longueur_tete*sin(inclination-ouverture_tete) 
+ 
+      self.tete1  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
+                                            tete_final_x_1,tete_final_y_1)
+      self.tete2  = QtGui.QGraphicsLineItem(tete_initial_x,tete_initial_y,\
+                                            tete_final_x_2,tete_final_y_2)
+
+ 
   
-    # texte de la fleche
-    moyenne_x = 0.5*(geometrie_droite[0] + geometrie_droite[2])
-    moyenne_y = 0.5*(geometrie_droite[1] + geometrie_droite[3])
-    position_texte_x = moyenne_x + 15*cos(inclination+pi/2)
-    position_texte_y = moyenne_y + 15*sin(inclination+pi/2)
-    self.texte_fleche = QtGui.QGraphicsSimpleTextItem(lettre)
-    self.texte_fleche.setPos(position_texte_x,position_texte_y)
-
-
-    self.fleche.setPen(style_ligne)
-    self.tete1.setPen(style_ligne)
-    self.tete2.setPen(style_ligne)
-
-    self.addToGroup(self.fleche)
-    self.addToGroup(self.tete1)
-    self.addToGroup(self.tete2)
-    self.addToGroup(self.texte_fleche)
 
 
   def calculer_droite(self,etat_initial,etat_final):
@@ -108,6 +158,8 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.dessiner_cercle()
 
   #### ITERACTIONS AVEC LA SOURIS
+
+## faire bouger l'etat
   def mousePressEvent(self, e):
     e.accept()
     self.setCursor(QtCore.Qt.ClosedHandCursor)
@@ -115,6 +167,7 @@ class Etat(QtGui.QGraphicsItemGroup):
     for fleche in graphe.fleches:
       graphe.removeItem(fleche)
 
+## placer l'etat
   def mouseReleaseEvent(self, e): 
     e.accept()
     self.setCursor(QtCore.Qt.OpenHandCursor)
@@ -127,8 +180,10 @@ class Etat(QtGui.QGraphicsItemGroup):
     #Proprietes des cercles
     self.centre_x = self.position_x
     self.centre_y = self.position_y
-    self.position_externe_x = self.centre_x - self.diametre/2.
+## cercle_exterieur
+    self.position_externe_x = self.centre_x - self.diametre/2.  #coin gauche supérieur
     self.position_externe_y = self.centre_y - self.diametre/2.
+## cercle_interieur
     self.position_interne_x = self.centre_x - .9*self.diametre/2.
     self.position_interne_y = self.centre_y - .9*self.diametre/2.
 
@@ -141,6 +196,7 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.position_texte_y = self.position_externe_y + self.diametre/2-taille_font/2
 
 
+## identifier la nouvelle position du etat et actualiser ses variables
   def actualiser_geometrie(self):
     self.position_x = self.position_initial_x + self.x()
     self.position_y = self.position_initial_y + self.y()
