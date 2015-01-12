@@ -8,6 +8,11 @@ from automate import *
 import unittest
 import random
 
+# On va écrire des tests unitaires et des tests aléatoires pour 3 automates :
+#     - Un automate déterministe
+#     - Un automate non déterministe
+#     - Un automate à epsilon-transition
+
 # cet automate déterministe reconnait les mots qui vérifient la propriété suivante :
 # le nombre de a dans le mot est un multiple de 3.
 
@@ -46,8 +51,13 @@ auto_eps.ajoute_transition(4,4,"a")
 auto_eps.ajoute_epsilon(1,2)
 auto_eps.ajoute_epsilon(3,4)
 
-longueur_mots = 95
+# jouer sur ce paramètre pour accéler le déroulé du test.
+# ! ce paramètre ne doit pas dépasser les 950 !
+# Si, en pratique, on a besoin d'utiliser des mots plus longs
+#(ce dont je doute fort), il faut recoder la classe execution
+longueur_mots = 950
 
+# transforme la liste de bits en mot avec les lettres a et b.
 def mot_alea (liste_bits):
 	mot = ""
 	for bit in liste_bits:
@@ -57,12 +67,14 @@ def mot_alea (liste_bits):
 			mot = mot + "b"
 	return mot
 	
+# renvoie une liste aléatoire de bits		
 def liste_bits_alea (taille) :
 	liste_bits = []
 	for entier in range(taille):
 		liste_bits.append(random.randint(0,1))
 	return liste_bits
 	
+# pour vérifier les propriétés de l'automate non déterministe
 def nombre_de_zeros_mod_3 (liste_bits):
 	nombre = 0
 	for bit in liste_bits:
@@ -98,7 +110,7 @@ def liste_propriete_3(long):
 				
 class test_execution (unittest.TestCase):
 
-	# tests unitaires
+	# tests unitaires des 3 automates
 	
 	def test_auto_det_unit(self):
 		mot_1 = "abbaba"
@@ -172,7 +184,7 @@ class test_execution (unittest.TestCase):
 		self.assertFalse(execut.bool)
 	
 	
-	# tests aleatoires
+	# tests aleatoires pour les 3 automates
 
 	def test_auto_det_alea (self):
 		for test in range(33*5):
