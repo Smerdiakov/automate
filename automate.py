@@ -187,6 +187,13 @@ class automate :
 				liste_image.append(etat)
 		liste_image=supprime_doublons(liste_image)
 		return liste_image
+		
+# les deux même fonction mais avec un type de retour "ensembliste"
+	def image_set(self,depart,lettre):
+		return set(self.image(depart,lettre)
+		
+	def image_liste_set(self,liste_depart,lettre):
+		return set(self.image_liste(liste_depart,lettre)
 
 # l'ensemble des etats que l'on peut atteindre par epsilon-transition :
 	def image_epsilon(self, depart):

@@ -5,13 +5,24 @@
 # la classe determinisation() prend un automate en argument
 # et le déterminise.
 
+
 from automate import *
 
 class determinisation :
 
 	def __init__(self,automate_init):
 		self.auto = automate_init
+		self.auto_det = automate()
 		
+# LA FONCTION A UTILISER ! #
+
+def determinise(self):
+	self.determine()
+	return auto_det
+	
+### partie 1 : la supression des epsilon-transitions ###
+########################################################
+	
 # suppression des epsilon-transitions :
 	def suppr_epsilon(self):
 		liste_etat = self.auto.liste_etats()
@@ -41,3 +52,40 @@ class determinisation :
 		liste_etat = self.auto.image_epsilon(etat_initial)
 		for etat in liste_etat:
 			self.auto.ajoute_initial(etat)
+			
+### partie 2 : la déterminisation ###
+#####################################
+
+	def etat_initial(self):
+		ensemble_de_depart = set(self.auto.initial)
+		self.auto_det.ajoute_initial(ensemble_de_depart)
+		
+	def etat_finaux(self):
+		liste_etats_det = self.auto_det.liste_etats()
+		liste_final = self.auto.final
+		for etat_det in liste_etats_det :
+			for etat in liste_final :
+				if etat in etat_det:
+					self.auto_det.ajoute_final(etat_det)
+					
+	def determine(self):
+		self.etat_initial()
+		booleen = True
+		alph = self.auto.alphabet()
+		while booleen :
+			booleen = False
+			for lettre in alph:
+				etats_existants = self.auto_det.liste_etats()
+				for etat in etats_existants :
+					etat_suivant = self.auto.image_liste_set(etat)
+					if etat_suivant in etats_existants :
+						self.auto_det.ajoute_transition(etat,etat_suivant,lettre)
+					else:
+						self.auto_det.ajoute_etat(etat_suivant)
+						booleen = True
+		self.etat_finaux()	
+					
+				
+				
+				
+		
