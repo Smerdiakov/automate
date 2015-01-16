@@ -19,6 +19,7 @@ class determinisation :
 		self.auto_det = automate()
 		
 # LA FONCTION A UTILISER EN PRATIQUE ! #
+# celle-ci renvoie l'algorithme après déterminisation :
 
 	def determinise(self):
 		self.determine()
@@ -60,10 +61,12 @@ class determinisation :
 ### partie 2 : la déterminisation ###
 #####################################
 
+# pour créer l'etat initial de l'automate déterminisé
 	def etat_initial(self):
 		ensemble_de_depart = frozenset(self.auto.initial)
 		self.auto_det.ajoute_initial(ensemble_de_depart)
-		
+
+# pour définir quels sont les états finaux de l'automate après déterminisation		
 	def etat_finaux(self):
 		liste_etats_det = self.auto_det.liste_etats()
 		liste_final = self.auto.final
@@ -71,14 +74,15 @@ class determinisation :
 			for etat in liste_final :
 				if etat in etat_det:
 					self.auto_det.ajoute_final(etat_det)
-					
+
+# le gros de l'algorithme :					
 	def determine(self):
 		self.suppr_epsilon()
 		self.etat_initial()
-		booleen = True
-		alph = self.auto.alphabet()
-		while booleen :
-			booleen = False
+		bool_nouvel_etat = True
+		alph = self.auto.alphabet()	
+		while bool_nouvel_etat :
+			bool_nouvel_etat = False
 			for lettre in alph:
 				etats_existants = self.auto_det.liste_etats()
 				for etat in etats_existants :
@@ -87,7 +91,7 @@ class determinisation :
 						self.auto_det.ajoute_transition(etat,etat_suivant,lettre)
 					elif not(etat_suivant==frozenset()):					
 						self.auto_det.ajoute_etat(etat_suivant)
-						booleen = True
+						bool_nouvel_etat = True
 		self.etat_finaux()	
 					
 				
