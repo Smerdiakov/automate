@@ -143,11 +143,11 @@ class Graphe(QtGui.QGraphicsScene):
 application = QtGui.QApplication(sys.argv)
 
 coleur = (255,255,255)
-etat0 = Etat("B",coleur,50,0,0,False)
-etat1 = Etat("A",coleur,50,0,0,False)
-etat2 = Etat("1",coleur,40,0,0,True)
-etat3 = Etat("34",coleur,40,0,0,False)
-etat4 = Etat("2",coleur,40,0,0,True)
+etat0 = Etat("B",False)
+etat1 = Etat("A",False)
+etat2 = Etat("1",True)
+etat3 = Etat("34",False)
+etat4 = Etat("2",True)
 
 autom = automate()
 

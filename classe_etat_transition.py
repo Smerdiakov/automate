@@ -125,16 +125,16 @@ class Transition(QtGui.QGraphicsItemGroup):
 
 
 class Etat(QtGui.QGraphicsItemGroup):
-  def __init__(self,etiq,col,diam,pos_x,pos_y,final):
+  def __init__(self,etiq,final):
     super(Etat,self).__init__(None)
   
     self.etiquette = etiq
-    self.coleur = QtGui.QColor(col[0],col[1],col[2])
-    self.diametre = diam
-    self.position_initial_x = pos_x
-    self.position_initial_y = pos_y
-    self.position_x = pos_x
-    self.position_y = pos_y
+    self.coleur = (255,255,255)
+    self.diametre = 10
+    self.position_initial_x = 0
+    self.position_initial_y = 0
+    self.position_x = 0
+    self.position_y = 0
     self.est_final = final
     self.graphe = [] #identifier l'instance de Graphe que contient l'etat 
  
@@ -160,7 +160,6 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.setCursor(QtCore.Qt.OpenHandCursor)
     self.actualiser_geometrie()
     self.graphe[0].placer_fleches()
-
 
   ### DESSINER FIGURE   
   def definir_configurations_graphiques(self):
