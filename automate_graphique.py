@@ -18,6 +18,10 @@ import sys
 import os
 
 
+if __name__ == '__main__':
+  main()
+
+
 class Graphe(QtGui.QGraphicsScene):
   def __init__(self,autom,taille):
     super(Graphe,self).__init__(0,0,taille,taille)
@@ -136,41 +140,42 @@ class Graphe(QtGui.QGraphicsScene):
 
 
 
+def main():
 ############# PREMIER TEST
 ####### A ORGANISER SUR  UN FICHIER TEST 
 ####### Pour tester, executer ./automate_graphique.py
 
-application = QtGui.QApplication(sys.argv)
+  application = QtGui.QApplication(sys.argv)
 
-coleur = (255,255,255)
-etat0 = Etat("B",False)
-etat1 = Etat("A",False)
-etat2 = Etat("1",True)
-etat3 = Etat("34",False)
-etat4 = Etat("2",True)
+  coleur = (255,255,255)
+  etat0 = Etat("B",False)
+  etat1 = Etat("A",False)
+  etat2 = Etat("1",True)
+  etat3 = Etat("34",False)
+  etat4 = Etat("2",True)
 
-autom = automate()
+  autom = automate()
 
-autom.ajoute_etat(etat0)
-autom.ajoute_etat(etat1)
-autom.ajoute_final(etat2)
-autom.ajoute_initial(etat3)
-autom.ajoute_final(etat4)
-autom.transition[etat3] = {}
-autom.transition[etat0] = {}
-autom.transition[etat1] = {}
-autom.ajoute_transition(etat3,etat0,'a')
-autom.ajoute_transition(etat0,etat1,'b')
-autom.ajoute_transition(etat1,etat2,'c')
-autom.ajoute_transition(etat0,etat4,'d')
-autom.ajoute_transition(etat1,etat1,'e')
-
-
-graphe = Graphe(autom,400)
-visualisation_graphe = QtGui.QGraphicsView(graphe)
-visualisation_graphe.show()
+  autom.ajoute_etat(etat0)
+  autom.ajoute_etat(etat1)
+  autom.ajoute_final(etat2)
+  autom.ajoute_initial(etat3)
+  autom.ajoute_final(etat4)
+  autom.transition[etat3] = {}
+  autom.transition[etat0] = {}
+  autom.transition[etat1] = {}
+  autom.ajoute_transition(etat3,etat0,'a')
+  autom.ajoute_transition(etat0,etat1,'b')
+  autom.ajoute_transition(etat1,etat2,'c')
+  autom.ajoute_transition(etat0,etat4,'d')
+  autom.ajoute_transition(etat1,etat1,'e')
 
 
-sys.exit(application.exec_())
+  graphe = Graphe(autom,400)
+  visualisation_graphe = QtGui.QGraphicsView(graphe)
+  visualisation_graphe.show()
+
+
+  sys.exit(application.exec_())
 
 
