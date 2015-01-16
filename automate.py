@@ -157,7 +157,16 @@ class automate :
 		booleen = booleen and (self.final==[])
 		booleen = booleen and (self.transition=={})
 		return booleen
-				
+
+# l'automate est-il sans epsilon-transition ?
+	def est_sans_epsilon (self):
+		for depart in self.transition:
+			for lettre in self.transition[depart]:
+				if (lettre == ""):
+					return False
+					
+		return True
+		
 ### Quelques methodes utiles ###
 ################################
 
@@ -211,7 +220,14 @@ class automate :
 				else :
 					return(liste)
 			
-				
+# préimage d'un état par une lettre : (l'ensemble des etats qui peuvent atteindre 
+# l'état passé en arguement à l'aide de la lettre passée en argument :
+	def preimage(self,etat,lettre):
+		liste = []
+		for etats in self.liste_etats():
+			if etat in self.image(etats,lettre):
+				liste.append(etats)
+		return liste
 				
 
 # renvoie l'alphabet de l'automate :
@@ -222,6 +238,14 @@ class automate :
 				if not(lettre == ""):
 					alph=alph|set(lettre)
 		return alph
+		
+# renvoie la liste des états de l'automate :
+	def liste_etats(self):
+		liste = []
+		for etat in self.transition :
+			liste.append(etat)
+		return(supprime_doublons(liste))
+				
 
 # l'automate est-il déterministe ?
 	def est_deterministe(self):

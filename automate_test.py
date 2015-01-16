@@ -218,6 +218,13 @@ class test_automate (unittest.TestCase):
 		self.assertFalse(auto_test.est_final(3))
 		self.assertFalse(auto_test.est_final(2))
 		
+	def test_est_sans_epsilon(self):
+		auto_test=automate()
+		auto_test.pour_le_test()
+		self.assertFalse(auto_test.est_sans_epsilon())
+		auto_test.supprime_lettre("")
+		self.assertTrue(auto_test.est_sans_epsilon())
+		
 	def test_image(self):
 		auto_test=automate()
 		auto_test.pour_le_test()
@@ -236,14 +243,32 @@ class test_automate (unittest.TestCase):
 		self.assertEqual(auto_test.epsilon_chemin(1,2), [1])
 		self.assertEqual(auto_test.epsilon_chemin(1,3), [1,2])
 		self.assertEqual(auto_test.epsilon_chemin(1,4), [1,2,3])
+	
+	def test_preimage(self):
+		auto_test=automate()
+		auto_test.pour_le_test()
+		self.assertTrue(1 in auto_test.preimage(2,'a'))
+		self.assertTrue(2 in auto_test.preimage(4,'b'))
+		self.assertTrue(1 in auto_test.preimage(3,'a'))
+		self.assertTrue(2 in auto_test.preimage(2,'a'))
+		self.assertFalse(4 in auto_test.preimage(1,'a'))
 		
 	def test_alphabet(self):
 		auto_test=automate()
 		auto_test.pour_le_test()
 		self.assertEqual(auto_test.alphabet(),{"a","b"})
-		self.assertNotEqual(auto_test.alphabet(),{"a"})
-		self.assertNotEqual(auto_test.alphabet(),{"b"})		
-		self.assertNotEqual(auto_test.alphabet(),{"a","b","c"})
+
+	
+	def test_liste_etats(self):
+		auto_test=automate()
+		auto_test.pour_le_test()
+		liste = auto_test.liste_etats()
+		self.assertFalse(0 in liste)		
+		self.assertTrue(1 in liste)
+		self.assertTrue(2 in liste)
+		self.assertTrue(3 in liste)
+		self.assertTrue(4 in liste)
+		self.assertFalse(5 in liste)		
 		
 	def test_est_deterministe(self):
 		auto_test=automate()

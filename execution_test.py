@@ -55,6 +55,7 @@ auto_eps.ajoute_epsilon(3,4)
 # ! ce paramètre ne doit pas dépasser les 950 !
 # Si, en pratique, on a besoin d'utiliser des mots plus longs
 #(ce dont je doute fort), il faut recoder la classe execution
+# (problème liée à la hauteur limite de la pile d'appels récursifs)
 longueur_mots = 950
 
 # transforme la liste de bits en mot avec les lettres a et b.
