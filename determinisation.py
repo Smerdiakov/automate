@@ -5,6 +5,10 @@
 # la classe determinisation() prend un automate en argument
 # et le déterminise.
 
+# Attention : il faut créer 1 objet de la classe déterminisation pour chaque automate !
+
+# Attention : les états de l'automate déterminisé seront étiquetés par des ensembles
+# et non pas par des entiers. penser à etiqueter de nouveau si nécessaire. 
 
 from automate import *
 
@@ -14,11 +18,11 @@ class determinisation :
 		self.auto = automate_init
 		self.auto_det = automate()
 		
-# LA FONCTION A UTILISER ! #
+# LA FONCTION A UTILISER EN PRATIQUE ! #
 
-def determinise(self):
-	self.determine()
-	return auto_det
+	def determinise(self):
+		self.determine()
+		return self.auto_det
 	
 ### partie 1 : la supression des epsilon-transitions ###
 ########################################################
@@ -57,7 +61,7 @@ def determinise(self):
 #####################################
 
 	def etat_initial(self):
-		ensemble_de_depart = set(self.auto.initial)
+		ensemble_de_depart = frozenset(self.auto.initial)
 		self.auto_det.ajoute_initial(ensemble_de_depart)
 		
 	def etat_finaux(self):
@@ -69,6 +73,7 @@ def determinise(self):
 					self.auto_det.ajoute_final(etat_det)
 					
 	def determine(self):
+		self.suppr_epsilon()
 		self.etat_initial()
 		booleen = True
 		alph = self.auto.alphabet()
@@ -77,10 +82,10 @@ def determinise(self):
 			for lettre in alph:
 				etats_existants = self.auto_det.liste_etats()
 				for etat in etats_existants :
-					etat_suivant = self.auto.image_liste_set(etat)
+					etat_suivant = self.auto.image_liste_set(etat, lettre )
 					if etat_suivant in etats_existants :
 						self.auto_det.ajoute_transition(etat,etat_suivant,lettre)
-					else:
+					elif not(etat_suivant==frozenset()):					
 						self.auto_det.ajoute_etat(etat_suivant)
 						booleen = True
 		self.etat_finaux()	

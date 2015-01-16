@@ -30,6 +30,25 @@ class test_determinisation (unittest.TestCase):
 		self.assertTrue(exec_test.bool)
 		exec_test.solution("abbba")
 		self.assertFalse(exec_test.bool)
+		
+	def test_determine(self):
+		auto_test=automate()
+		auto_test.pour_le_test()
+		auto_test.ajoute_final(3)
+		det_test = determinisation(auto_test)
+		auto_det = det_test.determinise()
+		print(auto_det.transition)
+		exec_test = execution(auto_det)
+		exec_test.solution("bbaa")
+		self.assertTrue(exec_test.bool)
+		exec_test.solution("bbaaa")
+		self.assertTrue(exec_test.bool)
+		exec_test.solution("bbabb")
+		self.assertTrue(exec_test.bool)
+		exec_test.solution("a")
+		self.assertTrue(exec_test.bool)
+		exec_test.solution("abbba")
+		self.assertFalse(exec_test.bool)
 
 if __name__=="__main__":
 	print("\n")
