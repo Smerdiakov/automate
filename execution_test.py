@@ -71,7 +71,7 @@ def mot_alea (liste_bits):
 # renvoie une liste aléatoire de bits		
 def liste_bits_alea (taille) :
 	liste_bits = []
-	for entier in range(taille):
+	for entier in range(random.randint(1,taille)):
 		liste_bits.append(random.randint(0,1))
 	return liste_bits
 	
@@ -209,7 +209,7 @@ class test_execution (unittest.TestCase):
 			mot = mot_alea(liste)
 			execut = execution(auto_ndet)
 			execut.execute(mot)
-			if (((liste[longueur_mots-1]==0)or((liste[longueur_mots-1]==1)and(liste[longueur_mots-2]==0))) == execut.bool):
+			if (((liste[len(liste)-1]==0)or((liste[len(liste)-1]==1)and(liste[len(liste)-2]==0))) == execut.bool):
 				pass
 			else : 
 				print("le test ne fonctionne pas pour ce mot : ")
