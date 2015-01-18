@@ -252,6 +252,16 @@ class automate :
 		for etat in self.transition :
 			liste.append(etat)
 		return(supprime_doublons(liste))
+
+# renvoie la liste des états intermediaires de l'automate :
+	def liste_etats_intermediaires(self):
+		liste = []
+		etats = self.liste_etats()
+		for etat in etats:
+			if etat not in (self.initial + self.final):
+				liste.append(etat)
+		return(supprime_doublons(liste))
+
 				
 
 # l'automate est-il déterministe ?
