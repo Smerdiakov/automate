@@ -28,6 +28,8 @@ class Transition(QtGui.QGraphicsItemGroup):
      self.style_ligne.setWidth(2)
      self.font  = QtGui.QFont("Arial",14)
 
+     if self.lettre == "":
+       self.lettre = "eps"
      self.texte_fleche = QtGui.QGraphicsSimpleTextItem(self.lettre)
 
      if self.depart == self.arrivee:
@@ -126,13 +128,12 @@ class Transition(QtGui.QGraphicsItemGroup):
     return geometrie
 
 
-
 class Etat(QtGui.QGraphicsItemGroup):
   def __init__(self,etiq,final):
     super(Etat,self).__init__(None)
   
     self.etiquette = etiq
-    self.coleur = (255,255,255)
+    self.coleur = QtGui.QBrush(QtCore.Qt.gray)
     self.diametre = 10
     self.position_initial_x = 0
     self.position_initial_y = 0
@@ -140,7 +141,8 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.position_y = 0
     self.est_final = final
     self.graphe = [] #identifier l'instance de Graphe que contient l'etat 
- 
+    self.niveau_graphe = 1 #profondeur de l'etat dans le graphe 
+
   def construire_etat(self):
     self.setFlag(QtGui.QGraphicsItem.ItemIsMovable,True)
     self.setCursor(QtCore.Qt.OpenHandCursor)
@@ -191,12 +193,18 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.position_y = self.position_initial_y + self.y()
     self.definir_configurations_graphiques()
 
+## Pour l'affichage de la solution
+  def actualiser_coleur(self):
+    self.cercle_ext.setBrush(self.coleur)
+    if self.est_final:
+      self.cercle_int.setBrush(self.coleur)
+
 ##
   def dessiner_cercle(self):
     self.cercle_ext = QtGui.QGraphicsEllipseItem(QtCore.QRectF(\
                             self.position_externe_x,self.position_externe_y,\
                             self.diametre,self.diametre))
-    self.cercle_ext.setBrush(QtCore.Qt.gray)
+    self.cercle_ext.setBrush(self.coleur)
     self.cercle_ext.setOpacity(0.3)
     self.cercle_ext.setAcceptHoverEvents(True)
     self.addToGroup(self.cercle_ext)
@@ -206,7 +214,7 @@ class Etat(QtGui.QGraphicsItemGroup):
       self.cercle_int = QtGui.QGraphicsEllipseItem(QtCore.QRectF(\
                               self.position_interne_x,self.position_interne_y,\
                               .9*self.diametre,.9*self.diametre))
-      self.cercle_int.setBrush(QtCore.Qt.gray)
+      self.cercle_int.setBrush(self.coleur)
       self.cercle_int.setOpacity(0.2)
       self.addToGroup(self.cercle_int)
 

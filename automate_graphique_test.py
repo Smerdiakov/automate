@@ -34,7 +34,6 @@ class test_automate_graphique (unittest.TestCase):
     self.autom.ajoute_etat(self.etat5)
     self.autom.ajoute_etat(self.etat6)
 
-
     self.autom.ajoute_transition(self.etat0,self.etat3,'a')
     self.autom.ajoute_transition(self.etat0,self.etat1,'b')
     self.autom.ajoute_transition(self.etat1,self.etat2,'c')
@@ -46,22 +45,23 @@ class test_automate_graphique (unittest.TestCase):
     self.autom.ajoute_transition(self.etat6,self.etat6,'i')
     self.autom.ajoute_transition(self.etat6,self.etat2,'j')
 
-
     application = QtGui.QApplication(sys.argv)
 
     self.graphe = Graphe(self.autom,500)
     visualisation_graphe = QtGui.QGraphicsView(self.graphe)
     visualisation_graphe.show()
 
-    #sys.exit(application.exec_())
-
+    sys.exit(application.exec_())
 
 
   def test_organiser_etats(self):
-    self.graphe.organiser_etats()
     ## verifier si tous les etats ont ete listes
-#    self.assertEqual(len(self.graphe.etats), \
-#                     len(self.autom.transition) + len(self.autom.final))
+    self.assertEqual(len(self.graphe.etats), \
+                     self.autom.nombre_etat())
+
+    ## verifier si les etats sont bien identifies comme finaux ou pas
+    for etat in self.graphe.etats:
+      self.assertEqual(etat.est_final,self.autom.est_final(etat))
 
   def test_identifier_precedents_successeurs(self):
     self.graphe.identifier_precedents_successeurs()

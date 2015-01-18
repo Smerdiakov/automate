@@ -14,11 +14,10 @@ from PyQt4 import QtGui,QtCore
 import classe_etat_transition
 from classe_etat_transition import *
 from automate import automate
+from execution import *
 import sys
 import os
-
-
-
+import time
 
 class Graphe(QtGui.QGraphicsScene):
   def __init__(self,autom,taille):
@@ -34,18 +33,16 @@ class Graphe(QtGui.QGraphicsScene):
     self.placer_etats()
     self.placer_fleches()
 
+#   solut = (self.etats[0],self.etats[1])
+#   self.afficher_solution(solut)
 
 ######### Fonctions de traitement des etats
 
 ## Organiser les listes d'etats
   def organiser_etats(self):
-    self.etats_intermediaires = []
-    for etat in self.automate.transition.keys():
-      #if etat not in self.automate.initial:
-      if etat not in (self.etats_intermediaires + self.automate.initial + self.automate.final):
-        self.etats_intermediaires.append(etat)
+    self.etats = self.automate.liste_etats()
+    self.etats_intermediaires = self.automate.liste_etats_intermediaires()
 
-    self.etats = self.automate.initial + self.etats_intermediaires + self.automate.final
 
 ## Faire des dictionaires avec les precedents et les successeurs de chaque etat        
   def identifier_precedents_successeurs(self):
@@ -71,9 +68,8 @@ class Graphe(QtGui.QGraphicsScene):
     #modifier les propriétés geométriques des états en fonction de tout l'automate
     # (espace disponible, nombre d'etats, relation entre les etats)
     self.diametre_etat = self.taille/8
-    self.distance_etats = self.taille/4
-
-     
+    self.distance_etats = self.taille/8
+  
     for etat in self.automate.initial:
       etat.position_initial_x = self.distance_etats
       etat.position_initial_y = self.taille/2
@@ -93,30 +89,23 @@ class Graphe(QtGui.QGraphicsScene):
                        break
                if precedents_places:
                    for precedent in self.precedents_etat[etat]:
+                       etat.niveau_graphe = max(etat.niveau_graphe,precedent.niveau_graphe+1)
                        assert(precedent in self.successeurs_etat.keys())
                        etat.position_initial_x = max([etat.position_initial_x,
-                                                     precedent.position_initial_x + self.distance_etats])
+                                                     precedent.position_initial_x + \
+                                                     self.distance_etats + \
+                                                     (1+(-1)**etat.niveau_graphe)*0.5*self.diametre_etat*(etat.niveau_graphe-1)]) #eviter des intersections entre fleches etats
                        nombre_etats_niveau = len(self.successeurs_etat[precedent]) 
                        if nombre_etats_niveau == 1:
                           etat.position_initial_y = precedent.position_initial_y
                        else:
                           etat.position_initial_y = precedent.position_initial_y + \
                                                     self.distance_etats* \
-                                                    (-1)**(self.successeurs_etat[precedent].index(etat)) * \
-                                                    int(nombre_etats_niveau/2)
+                                                    (-1)**(self.successeurs_etat[precedent].index(etat)) *( int(nombre_etats_niveau/2)  )  + (1+(-1)**etat.niveau_graphe)*0.5*self.diametre_etat*(etat.niveau_graphe-1)
                    etat.actualiser_geometrie() 
                else:
                    placement_fini = False
    
-
-    #verifier si l'etat est correctment identifie comme final ou pas 
-    for etat in self.automate.initial:
-      etat.est_final = False
-    for etat in self.automate.transition.keys():
-      etat.est_final = False
-    for etat in self.automate.final:
-      etat.est_final = True
-
     for etat in self.etats:
       etat.diametre = self.diametre_etat
       etat.graphe.append(self) # L'etat connait l'automat ou il se trouve
@@ -136,6 +125,19 @@ class Graphe(QtGui.QGraphicsScene):
        self.fleches.append(dessin_transition)
        self.addItem(dessin_transition)
 
+
+################ Fonctions pour afficher la solution
+##### animations, etc.
+##### apres l'execution du methode 'execution' de execute.py
+  def afficher_solution(self,etats_solution):
+    temps = QtCore.QTime()
+    for etat in etats_solution:
+       etat.coleur  = QtGui.QBrush(QtCore.Qt.cyan)
+       temps.start()
+       print(temps.elapsed())
+       while (temps.elapsed()<1000):
+         pass
+       etat.actualiser_coleur()
 
 def main():
 ############# PREMIER TEST
@@ -173,7 +175,13 @@ def main():
   visualisation_graphe.show()
 
 
+# executer = execution(autom)
+# self.solut = executer.solution("abcd")
+# print(self.solut)
+
+
   sys.exit(application.exec_())
+
 
 if __name__ == '__main__':
   main()
