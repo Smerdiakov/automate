@@ -18,8 +18,6 @@ import sys
 import os
 
 
-if __name__ == '__main__':
-  main()
 
 
 class Graphe(QtGui.QGraphicsScene):
@@ -43,7 +41,8 @@ class Graphe(QtGui.QGraphicsScene):
   def organiser_etats(self):
     self.etats_intermediaires = []
     for etat in self.automate.transition.keys():
-      if etat not in self.automate.initial:
+      #if etat not in self.automate.initial:
+      if etat not in (self.etats_intermediaires + self.automate.initial + self.automate.final):
         self.etats_intermediaires.append(etat)
 
     self.etats = self.automate.initial + self.etats_intermediaires + self.automate.final
@@ -67,7 +66,7 @@ class Graphe(QtGui.QGraphicsScene):
 ## Configurer la taille et la position des etats et les placer sur l'automate
   def placer_etats(self):
 
-    [precedents_etat,successeurs_etat] = self.identifier_precedents_successeurs()
+    [self.precedents_etat,self.successeurs_etat] = self.identifier_precedents_successeurs()
 
     #modifier les propriétés geométriques des états en fonction de tout l'automate
     # (espace disponible, nombre d'etats, relation entre les etats)
@@ -88,22 +87,22 @@ class Graphe(QtGui.QGraphicsScene):
         for etat in self.etats_intermediaires + self.automate.final:
             if etat.position_initial_x == 0: 
                precedents_places = True
-               for precedent in precedents_etat[etat]:
+               for precedent in self.precedents_etat[etat]:
                    if precedent.position_initial_x == 0:
                        precedents_places = False
                        break
                if precedents_places:
-                   for precedent in precedents_etat[etat]:
-                       assert(precedent in successeurs_etat.keys())
+                   for precedent in self.precedents_etat[etat]:
+                       assert(precedent in self.successeurs_etat.keys())
                        etat.position_initial_x = max([etat.position_initial_x,
                                                      precedent.position_initial_x + self.distance_etats])
-                       nombre_etats_niveau = len(successeurs_etat[precedent]) 
+                       nombre_etats_niveau = len(self.successeurs_etat[precedent]) 
                        if nombre_etats_niveau == 1:
                           etat.position_initial_y = precedent.position_initial_y
                        else:
                           etat.position_initial_y = precedent.position_initial_y + \
                                                     self.distance_etats* \
-                                                    (-1)**(successeurs_etat[precedent].index(etat)) * \
+                                                    (-1)**(self.successeurs_etat[precedent].index(etat)) * \
                                                     int(nombre_etats_niveau/2)
                    etat.actualiser_geometrie() 
                else:
@@ -138,13 +137,11 @@ class Graphe(QtGui.QGraphicsScene):
        self.addItem(dessin_transition)
 
 
-
-
 def main():
 ############# PREMIER TEST
 ####### A ORGANISER SUR  UN FICHIER TEST 
 ####### Pour tester, executer ./automate_graphique.py
-
+  print("main automate")
   application = QtGui.QApplication(sys.argv)
 
   coleur = (255,255,255)
@@ -178,4 +175,6 @@ def main():
 
   sys.exit(application.exec_())
 
+if __name__ == '__main__':
+  main()
 

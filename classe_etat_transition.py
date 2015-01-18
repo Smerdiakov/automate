@@ -5,6 +5,9 @@ import sys
 import os
 from math import pi,sin,cos,atan
 
+def main():
+  print("main etat")
+
 if __name__ == '__main__':
   main()
 
@@ -213,6 +216,5 @@ class Etat(QtGui.QGraphicsItemGroup):
     self.texte.setAcceptHoverEvents(False)
     self.addToGroup(self.texte)
 
-def main():
-  print("main")
+
 
