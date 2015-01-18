@@ -11,16 +11,6 @@ import unittest
 
 
 
-application = QtGui.QApplication(sys.argv)
-
-graphe = Graphe(autom,500)
-visualisation_graphe = QtGui.QGraphicsView(graphe)
-visualisation_graphe.show()
-
-
-sys.exit(application.exec_())
-
-
 class test_automate_graphique (unittest.TestCase):
 
 ############  Creation d'un automate
@@ -56,39 +46,60 @@ class test_automate_graphique (unittest.TestCase):
     self.autom.ajoute_transition(self.etat6,self.etat6,'i')
     self.autom.ajoute_transition(self.etat6,self.etat2,'j')
 
-  def organiser_etats_test(self):
-    self.organiser_etats()
-    ## verifier si tous les etats ont ete listes
-    self.assertEqual(len(self.etats), \
-                     len(self.autom.transition) + len(self.autom.final))
 
-  def identifier_precedents_successeurs(self):
-    self.identifier_precedents_successeurs()
+    application = QtGui.QApplication(sys.argv)
+
+    self.graphe = Graphe(self.autom,500)
+    visualisation_graphe = QtGui.QGraphicsView(self.graphe)
+    visualisation_graphe.show()
+
+    #sys.exit(application.exec_())
+
+
+
+  def test_organiser_etats(self):
+    self.graphe.organiser_etats()
+    ## verifier si tous les etats ont ete listes
+#    self.assertEqual(len(self.graphe.etats), \
+#                     len(self.autom.transition) + len(self.autom.final))
+
+  def test_identifier_precedents_successeurs(self):
+    self.graphe.identifier_precedents_successeurs()
     ## verifier si tous les etats sont dans les deux dictionnaires
-    self.assertEqual(len(self.autom.precedents_etat), \
-                     len(self.autom.successeurs_etat)
+    self.assertEqual(len(self.graphe.precedents_etat), \
+                     len(self.graphe.successeurs_etat))
     ## verifier si l'etat initial n'a pas de predecesseurs
     #### et l'etat final n'a pas de successeurs
-    self.assert(len(self.autom.precedents_etat[etat0],0)) #etat initial
-    self.assert(len(self.autom.successeurs_etat[etat2],0)) #etat final
-    self.assert(len(self.autom.successeurs_etat[etat4],0)) #etat final
+    self.assertEqual(len(self.graphe.precedents_etat[self.etat0]),0) #etat_initial 
+    self.assertEqual(len(self.graphe.successeurs_etat[self.etat2]),0) #etat final
+    self.assertEqual(len(self.graphe.successeurs_etat[self.etat4]),0) #etat final
 
     ## verifier (x est precedent de y) <=> (y est successeur de x)
-    for depart in self.autom.precedents_etat.keys():
-      for arrivee in self.autom.precedents_etat[depart]:
-        assert (depart in self.autom.successeurs_etat[arrivee])
+    for depart in self.graphe.precedents_etat.keys():
+      for arrivee in self.graphe.precedents_etat[depart]:
+        assert (depart in self.graphe.successeurs_etat[arrivee])
 
-    for arrivee in self.autom.successeurs_etat.keys():
-      for depart in self.autom.successeurs_etat[arrivee]:
-        assert (arrivee in self.autom.precedents_etat[depart])
+    for arrivee in self.graphe.successeurs_etat.keys():
+      for depart in self.graphe.successeurs_etat[arrivee]:
+        assert (arrivee in self.graphe.precedents_etat[depart])
 
-  def placer_etats_test(self):
-    coordonnes = []
-    for etat in self.autom.etats:
-      coordonnes.append([etat.centre_x,etat.centre_y]) 
+  def test_placer_etats(self):
+    coordonnees = []
+    for etat in self.graphe.etats:
+      coordonnees.append([etat.centre_x,etat.centre_y]) 
     ## verifier s'il y a deux etats dans la meme position
-    for coord in self.autom.etats:
-      complementaire = coordonnes
+    for coord in coordonnees: 
+      complementaire = coordonnees
       complementaire.remove(coord) #seuleument la premiere fois que l'element apparaitre
       self.assertNotIn(coord,complementaire)
-   
+
+  def test_placer_fleches(self):
+    self.assertEqual(len(self.graphe.fleches),len(self.graphe.transition.keys()))
+
+if __name__=="__main__":
+	print("\n")
+	print(" ------------------------------------------")
+	print("   debut du test sur la classe graphe :")
+	print(" ------------------------------------------")
+	print("\n")
+	unittest.main()
