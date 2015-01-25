@@ -49,8 +49,10 @@ class automate :
 	
 # ajout d'une transition
 	def ajoute_transition(self, depart, arrivee, lettre):
-		assert(depart in self.transition)	
-		assert(depart in self.transition)
+		if not depart in self.transition:
+			self.ajoute_etat(depart)
+		if not arrivee in self.transition:
+			self.ajoute_etat(arrivee)
 		if lettre in self.transition[depart]:
 			if arrivee in self.transition[depart][lettre]:
 				pass 
@@ -323,7 +325,42 @@ class automate :
 		self.ajoute_transition(4,2,"b")
 		self.ajoute_transition(4,3,"b")
 		self.ajoute_transition(2,4,"b")
-		self.ajoute_transition(2,1,"")	
+		self.ajoute_transition(2,1,"")
+		
+# change l'étiquetage des états de l'automate
+# le test de cette methode est fait dans execution_test.py		
+	def nouvelles_etiquettes(self):
+		auto_local = automate()
+		correspondance = {}
+		nouvel_entier =1
+		
+		for depart in self.transition:
+			if not depart in correspondance :
+				correspondance[depart]=nouvel_entier
+				nouvel_entier = nouvel_entier +1
+				
+			for lettre in self.transition[depart]:
+				for arrivee in self.transition[depart][lettre]:
+				
+					if not arrivee in correspondance :
+						correspondance[arrivee]=nouvel_entier
+						nouvel_entier = nouvel_entier +1
+							
+					auto_local.ajoute_transition(correspondance[depart],correspondance[arrivee],lettre)
+					
+		for etat in self.initial:
+			if not etat in correspondance :
+				correspondance[etat]=nouvel_entier
+				nouvel_entier = nouvel_entier +1
+			auto_local.ajoute_initial(correspondance[etat])
+			
+		for etat in self.final:
+			if not etat in correspondance :
+				correspondance[etat]=nouvel_entier
+				nouvel_entier = nouvel_entier +1
+			auto_local.ajoute_final(correspondance[etat])
+			
+		self = auto_local
 		
 		
 # supprime les doublons d'une liste :

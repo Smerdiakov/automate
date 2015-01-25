@@ -13,6 +13,8 @@ import random
 #     - Un automate non déterministe
 #     - Un automate à epsilon-transition
 
+# on va également en profiter pour tester la methode de réétiquettage d'un automate
+
 # cet automate déterministe reconnait les mots qui vérifient la propriété suivante :
 # le nombre de a dans le mot est un multiple de 3.
 
@@ -184,11 +186,11 @@ class test_execution (unittest.TestCase):
 		execut.execute(mot_4)
 		self.assertFalse(execut.bool)
 	
-	
 	# tests aleatoires pour les 3 automates
 
 	def test_auto_det_alea (self):
 		for test in range(33*5):
+			auto_det.nouvelles_etiquettes()
 			if test%5==0:
 				print(" --> ",int(test/5)," % effectués.")
 			liste = liste_bits_alea(longueur_mots)
@@ -202,6 +204,7 @@ class test_execution (unittest.TestCase):
 				self.assertNotEqual(nombre,0)
 
 	def test_auto_ndet_alea (self):
+		auto_ndet.nouvelles_etiquettes()
 		for test in range(66*5,101*5):
 			if test%5==0:
 				print(" --> ",int(test/5)," % effectués.")
@@ -217,6 +220,7 @@ class test_execution (unittest.TestCase):
 				self.assertTrue(((liste[longueur_mots-1]==0)or((liste[longueur_mots-1]==1)and(liste[longueur_mots-1]==1))) == execut.bool)
 	
 	def test_auto_eps_alea(self):
+		auto_eps.nouvelles_etiquettes()
 		for test in range(33*5,66*5):
 			if test%5==0:
 				print(" --> ",int(test/5)," % effectués.")
