@@ -77,7 +77,7 @@ def liste_bits_alea (taille) :
 		liste_bits.append(random.randint(0,1))
 	return liste_bits
 	
-# pour vérifier les propriétés de l'automate non déterministe
+# pour vérifier les propriétés de l'automate déterministe
 def nombre_de_zeros_mod_3 (liste_bits):
 	nombre = 0
 	for bit in liste_bits:
