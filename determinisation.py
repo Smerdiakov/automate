@@ -19,7 +19,7 @@ class determinisation :
 		self.auto_det = automate()
 		
 # LA FONCTION A UTILISER EN PRATIQUE ! #
-# celle-ci renvoie l'algorithme après déterminisation :
+# celle-ci renvoie l'automate après déterminisation :
 
 	def determinise(self):
 		self.determine()

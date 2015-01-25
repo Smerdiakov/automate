@@ -13,7 +13,7 @@ import random
 #     - Un automate non déterministe
 #     - Un automate à epsilon-transition
 
-# on va également en profiter pour tester la methode de réétiquettage d'un automate
+# on va également en profiter pour tester la methode de réétiquetage d'un automate
 
 # cet automate déterministe reconnait les mots qui vérifient la propriété suivante :
 # le nombre de a dans le mot est un multiple de 3.
