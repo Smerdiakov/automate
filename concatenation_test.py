@@ -1,18 +1,16 @@
-#####################################
-## test pour l'union d'un automate ##
-#####################################
+##############################################
+## test pour la concatenation d'un automate ##
+##############################################
 
-# on va reprendre des automates du test de execution,
-# construire les réunions et vérifier si la propriété 
-# d'union est toujours satisfaite
+# les tests sont semblables aux tests pour la fonction union
 
 from execution import *
 from automate import *
-from union import *
+from concatenation import *
 import unittest
 import random
 
-longueur_mots = 100;
+longueur_mots = 450;
 
 # transforme la liste de bits en mot avec les lettres a et b.
 def mot_alea (liste_bits):
@@ -65,36 +63,36 @@ auto_ndet.ajoute_transition(1,1,"a")
 auto_ndet.ajoute_transition(1,1,"b")
 auto_ndet.ajoute_transition(2,3,"b")
 
-auto_union = reunion(auto_det,auto_ndet)
+auto_concat = concat(auto_det,auto_ndet)
 
 class test_union(unittest.TestCase):
 	def test_union (self):
 		for test in range(longueur_mots):
-			liste = liste_bits_alea(longueur_mots)
-			mot = mot_alea(liste)
-			nombre = nombre_de_zeros_mod_3(liste)
+			liste_1 = liste_bits_alea(longueur_mots)
+			liste_2 = liste_bits_alea(longueur_mots)
+			mot_1 = mot_alea(liste_1)
+			mot_2 = mot_alea(liste_2)
 			
 			execut_det = execution(auto_det)
-			execut_det.execute(mot)
+			execut_det.execute(mot_1)
 		
 			execut_ndet = execution(auto_ndet)
-			execut_ndet.execute(mot)
+			execut_ndet.execute(mot_2)
 		
-			execut_union = execution(auto_union)
-			execut_union.execute(mot)
+			execut_concat = execution(auto_concat)
+			execut_concat.execute(mot_1+mot_2)
 		
-		# on vérifie si l'ensemble des mots acceptés par auto_union
-		# est la réunion des 2 ensembles de mots acceptés resp.
-		# par auto_det et auto_ndet
-			if execut_union.bool:
-				self.assertTrue(execut_det.bool or execut_ndet.bool)
-			else:
-				self.assertFalse(execut_det.bool or execut_ndet.bool)
+		# on vérifie si la propriété de concatenation des vérifiée :
+			if (execut_det.bool and execut_ndet.bool)==(execut_concat.bool) :
+				pass
+			else :
+				print("la concatenation de fonctionnne pas pour les mots :\n",mot_1,"\n et :\n", mot_2)
+			self.assertEqual( execut_det.bool and execut_ndet.bool, execut_concat.bool)
 
 if __name__=="__main__":
 	print("\n")
-	print(" --------------------------------------")
-	print("   debut du test sur la classe union :")
-	print(" --------------------------------------")
+	print(" ----------------------------------------------")
+	print("   debut du test sur la classe concatenation :")
+	print(" ----------------------------------------------")
 	print("\n")
 	unittest.main()
