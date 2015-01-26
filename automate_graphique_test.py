@@ -39,11 +39,11 @@ class test_automate_graphique (unittest.TestCase):
     self.autom.ajoute_transition(self.etat1,self.etat2,'c')
     self.autom.ajoute_transition(self.etat3,self.etat4,'d')
     self.autom.ajoute_transition(self.etat1,self.etat1,'e')
-    self.autom.ajoute_transition(self.etat3,self.etat5,'f')
+    self.autom.ajoute_transition(self.etat3,self.etat5,'')
     self.autom.ajoute_transition(self.etat5,self.etat4,'g')
     self.autom.ajoute_transition(self.etat5,self.etat6,'h')
     self.autom.ajoute_transition(self.etat6,self.etat6,'i')
-    self.autom.ajoute_transition(self.etat6,self.etat2,'j')
+    self.autom.ajoute_transition(self.etat6,self.etat2,'')
 
     application = QtGui.QApplication(sys.argv)
 
@@ -51,7 +51,7 @@ class test_automate_graphique (unittest.TestCase):
     visualisation_graphe = QtGui.QGraphicsView(self.graphe)
     visualisation_graphe.show()
 
-    sys.exit(application.exec_())
+#    sys.exit(application.exec_())
 
 
   def test_organiser_etats(self):
@@ -95,6 +95,7 @@ class test_automate_graphique (unittest.TestCase):
 
   def test_placer_fleches(self):
     self.assertEqual(len(self.graphe.fleches),len(self.graphe.transition.keys()))
+
 
 if __name__=="__main__":
 	print("\n")
