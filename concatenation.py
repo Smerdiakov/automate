@@ -29,6 +29,12 @@ def concat (auto_1, auto_2):
 	#liste des états initiaux de l'automate 2
 	liste_initial_2= remplit_initial_2(auto_concat, taille_1, taille_2)
 	
+	for etat_1 in liste_final_1:
+		for etat_2 in liste_initial_2:
+			auto_concat.ajoute_epsilon(etat_1,etat_2)
+			
+	return auto_concat
+	
 	
 
 def remplit_final_1(auto_concat, taille_1):
