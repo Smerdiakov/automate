@@ -21,8 +21,8 @@ from union import *
 
 def concat (auto_1, auto_2):
 	auto_concat = reunion(auto_1, auto_2)
-	taille_1 = auto1.nombre_etat()
-	taille_2 = auto2.nombre_etat()
+	taille_1 = auto_1.nombre_etat()
+	taille_2 = auto_2.nombre_etat()
 	
 	# liste des états finaux de l'automate 1
 	liste_final_1 = remplit_final_1(auto_concat, taille_1)

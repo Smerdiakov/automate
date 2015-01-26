@@ -10,7 +10,7 @@ from concatenation import *
 import unittest
 import random
 
-longueur_mots = 100;
+longueur_mots = 450;
 
 # transforme la liste de bits en mot avec les lettres a et b.
 def mot_alea (liste_bits):
@@ -83,7 +83,7 @@ class test_union(unittest.TestCase):
 			execut_concat.execute(mot_1+mot_2)
 		
 		# on vérifie si la propriété de concatenation des vérifiée :
-			if execut_det.bool and execut_ndet.bool, execut_concat.bool :
+			if (execut_det.bool and execut_ndet.bool)==(execut_concat.bool) :
 				pass
 			else :
 				print("la concatenation de fonctionnne pas pour les mots :\n",mot_1,"\n et :\n", mot_2)
