@@ -1,6 +1,6 @@
-#########################################
-## test pour l'execution d'un automate ##
-#########################################
+#####################################
+## test pour l'union d'un automate ##
+#####################################
 
 # on va reprendre des automates du test de execution,
 # construire les réunions et vérifier si la propriété 
@@ -93,8 +93,8 @@ class test_union(unittest.TestCase):
 
 if __name__=="__main__":
 	print("\n")
-	print(" ------------------------------------------")
-	print("   debut du test sur la classe execution :")
-	print(" ------------------------------------------")
+	print(" --------------------------------------")
+	print("   debut du test sur la classe union :")
+	print(" --------------------------------------")
 	print("\n")
 	unittest.main()
