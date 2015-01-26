@@ -17,6 +17,7 @@ class Transition(QtGui.QGraphicsItemGroup):
     super(Transition,self).__init__(None)
 
     self.lettre = lettre
+
     self.depart = etat_initial
     self.arrivee = etat_final
  
@@ -29,7 +30,7 @@ class Transition(QtGui.QGraphicsItemGroup):
      self.font  = QtGui.QFont("Arial",14)
 
      if self.lettre == "":
-       self.lettre = "eps"
+       self.lettre = "ε"
      self.texte_fleche = QtGui.QGraphicsSimpleTextItem(self.lettre)
 
      if self.depart == self.arrivee:

@@ -167,7 +167,7 @@ def main():
   autom.ajoute_transition(etat0,etat1,'b')
   autom.ajoute_transition(etat1,etat2,'c')
   autom.ajoute_transition(etat0,etat4,'d')
-  autom.ajoute_transition(etat1,etat1,'e')
+  autom.ajoute_transition(etat1,etat1,'')
 
 
   graphe = Graphe(autom,400)
