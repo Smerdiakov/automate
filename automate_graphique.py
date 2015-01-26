@@ -33,8 +33,7 @@ class Graphe(QtGui.QGraphicsScene):
     self.placer_etats()
     self.placer_fleches()
 
-#   solut = (self.etats[0],self.etats[1])
-#   self.afficher_solution(solut)
+    self.solution = [] #a definir
 
 ######### Fonctions de traitement des etats
 
@@ -89,19 +88,26 @@ class Graphe(QtGui.QGraphicsScene):
                        break
                if precedents_places:
                    for precedent in self.precedents_etat[etat]:
+                       # L'etat est au moins un niveau au dessus de tous ses precesseurs
                        etat.niveau_graphe = max(etat.niveau_graphe,precedent.niveau_graphe+1)
                        assert(precedent in self.successeurs_etat.keys())
                        etat.position_initial_x = max([etat.position_initial_x,
                                                      precedent.position_initial_x + \
                                                      self.distance_etats + \
-                                                     (1+(-1)**etat.niveau_graphe)*0.5*self.diametre_etat*(etat.niveau_graphe-1)]) #eviter des intersections entre fleches etats
+                                                     (1+(-1)**etat.niveau_graphe)*\
+                                                     0.5*self.diametre_etat*(etat.niveau_graphe-1)])
+                                                     #eviter des intersections entre fleches etats
                        nombre_etats_niveau = len(self.successeurs_etat[precedent]) 
                        if nombre_etats_niveau == 1:
                           etat.position_initial_y = precedent.position_initial_y
                        else:
                           etat.position_initial_y = precedent.position_initial_y + \
                                                     self.distance_etats* \
-                                                    (-1)**(self.successeurs_etat[precedent].index(etat)) *( int(nombre_etats_niveau/2)  )  + (1+(-1)**etat.niveau_graphe)*0.5*self.diametre_etat*(etat.niveau_graphe-1)
+                                                    (-1)**(self.successeurs_etat[precedent].index(etat))*\
+                                                    (int(nombre_etats_niveau/2)) +\
+                                                    (0+(-1)**etat.niveau_graphe)*\
+                                                    0.5*self.diametre_etat*(etat.niveau_graphe-1)
+                                                    #eviter des intersections entre fleches etats
                    etat.actualiser_geometrie() 
                else:
                    placement_fini = False
@@ -129,16 +135,21 @@ class Graphe(QtGui.QGraphicsScene):
 ################ Fonctions pour afficher la solution
 ##### animations, etc.
 ##### apres l'execution du methode 'execution' de execute.py
-  def afficher_solution(self,etats_solution):
-    temps = QtCore.QTime()
-    for etat in etats_solution:
-       etat.coleur  = QtGui.QBrush(QtCore.Qt.cyan)
-       temps.start()
-       print(temps.elapsed())
-       while (temps.elapsed()<1000):
-         pass
-       etat.actualiser_coleur()
+  def afficher_solution(self):
+   temps = QtCore.QTime()
+   temps.start()
+   indice_etat = 0
+   button = QtGui.QPushButton("Prochain etat")
+   button.show()
+   button.raise_()
 
+   while indice_etat <  len(self.solution):
+       etat = self.solution[indice_etat]
+       print(temps.elapsed())
+       print(indice_etat)
+       etat.coleur  = QtGui.QBrush(QtCore.Qt.cyan)
+       button.clicked.connect(etat.actualiser_coleur)
+       indice_etat += 1
 def main():
 ############# PREMIER TEST
 ####### A ORGANISER SUR  UN FICHIER TEST 
@@ -175,12 +186,21 @@ def main():
   visualisation_graphe.show()
 
 
-# executer = execution(autom)
-# self.solut = executer.solution("abcd")
-# print(self.solut)
 
+#  executer = execution(autom)
+#  self.solut = executer.solution("abcd")
+#  print(self.solut)
+
+  solut = (graphe.etats[0],graphe.etats[1])
+  graphe.solution = solut
+
+  button = QtGui.QPushButton("Afficher la solution")
+  button.show()
+  button.raise_()
+  button.clicked.connect(graphe.afficher_solution)
 
   sys.exit(application.exec_())
+
 
 
 if __name__ == '__main__':
