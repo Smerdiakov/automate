@@ -93,8 +93,8 @@ class test_union(unittest.TestCase):
 
 if __name__=="__main__":
 	print("\n")
-	print(" --------------------------------------")
-	print("   debut du test sur la classe union :")
-	print(" --------------------------------------")
+	print(" -------------------------------")
+	print("   debut du test sur l' union :")
+	print(" -------------------------------")
 	print("\n")
 	unittest.main()

@@ -91,8 +91,8 @@ class test_union(unittest.TestCase):
 
 if __name__=="__main__":
 	print("\n")
-	print(" ----------------------------------------------")
-	print("   debut du test sur la classe concatenation :")
-	print(" ----------------------------------------------")
+	print(" ---------------------------------------")
+	print("   debut du test sur la concatenation :")
+	print(" ---------------------------------------")
 	print("\n")
 	unittest.main()
