@@ -28,15 +28,6 @@ def liste_bits_alea (taille) :
 	for entier in range(random.randint(1,taille)):
 		liste_bits.append(random.randint(0,1))
 	return liste_bits
-	
-# pour vérifier les propriétés de l'automate déterministe
-def nombre_de_zeros_mod_3 (liste_bits):
-	nombre = 0
-	for bit in liste_bits:
-		if bit==0 :
-			nombre = nombre +1
-	nombre = nombre % 3
-	return nombre
 
 # cet automate déterministe reconnait les mots qui vérifient la propriété suivante :
 # le nombre de a dans le mot est un multiple de 3.
@@ -65,8 +56,8 @@ auto_ndet.ajoute_transition(2,3,"b")
 
 auto_concat = concat(auto_det,auto_ndet)
 
-class test_union(unittest.TestCase):
-	def test_union (self):
+class test_concat(unittest.TestCase):
+	def test_concat (self):
 		for test in range(longueur_mots):
 			liste_1 = liste_bits_alea(longueur_mots)
 			liste_2 = liste_bits_alea(longueur_mots)
@@ -82,7 +73,7 @@ class test_union(unittest.TestCase):
 			execut_concat = execution(auto_concat)
 			execut_concat.execute(mot_1+mot_2)
 		
-		# on vérifie si la propriété de concatenation des vérifiée :
+		# on vérifie si la propriété de concatenation est vérifiée :
 			if (execut_det.bool and execut_ndet.bool)==(execut_concat.bool) :
 				pass
 			else :

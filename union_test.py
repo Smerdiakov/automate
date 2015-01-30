@@ -31,15 +31,6 @@ def liste_bits_alea (taille) :
 		liste_bits.append(random.randint(0,1))
 	return liste_bits
 	
-# pour vérifier les propriétés de l'automate déterministe
-def nombre_de_zeros_mod_3 (liste_bits):
-	nombre = 0
-	for bit in liste_bits:
-		if bit==0 :
-			nombre = nombre +1
-	nombre = nombre % 3
-	return nombre
-
 # cet automate déterministe reconnait les mots qui vérifient la propriété suivante :
 # le nombre de a dans le mot est un multiple de 3.
 
