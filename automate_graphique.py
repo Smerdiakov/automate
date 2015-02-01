@@ -33,8 +33,9 @@ class Graphe(QtGui.QGraphicsScene):
     self.placer_etats()
     self.placer_fleches()
 
+    self.creer_buttons_solution()
     self.solution = [] #a definir
-
+    self.solutions_affichees = []
 ######### Fonctions de traitement des etats
 
 ## Organiser les listes d'etats
@@ -94,7 +95,7 @@ class Graphe(QtGui.QGraphicsScene):
                        etat.position_initial_x = max([etat.position_initial_x,
                                                      precedent.position_initial_x + \
                                                      self.distance_etats + \
-                                                     (1+(-1)**etat.niveau_graphe)*\
+                                                     (1.5+(-1)**etat.niveau_graphe)*\
                                                      0.5*self.diametre_etat*(etat.niveau_graphe-1)])
                                                      #eviter des intersections entre fleches etats
                        nombre_etats_niveau = len(self.successeurs_etat[precedent]) 
@@ -135,21 +136,34 @@ class Graphe(QtGui.QGraphicsScene):
 ################ Fonctions pour afficher la solution
 ##### animations, etc.
 ##### apres l'execution du methode 'execution' de execute.py
-  def afficher_solution(self):
-   temps = QtCore.QTime()
-   temps.start()
-   indice_etat = 0
-   button = QtGui.QPushButton("Prochain etat")
-   button.show()
-   button.raise_()
 
-   while indice_etat <  len(self.solution):
-       etat = self.solution[indice_etat]
-       print(temps.elapsed())
-       print(indice_etat)
-       etat.coleur  = QtGui.QBrush(QtCore.Qt.cyan)
-       button.clicked.connect(etat.actualiser_coleur)
-       indice_etat += 1
+  ##### Remplacer ce button par un button dans la fenetre
+  def creer_buttons_solution(self):
+    button = QtGui.QGraphicsRectItem(0,0,20,40)
+    button.setAcceptHoverEvents(False)
+    self.addItem(button)  
+
+  ##### Remplacer cette interaction avec la souris par un button dans la fenetre  
+  def mouseDoubleClickEvent(self,e):
+    e.accept()
+    etat_changer = 0
+    assert(len(self.solution) == len(self.solutions_affichees))
+    while self.solutions_affichees[etat_changer] == 1 :
+      etat_changer += 1
+      if etat_changer not in range(len(self.solutions_affichees)) :
+        break
+    if etat_changer  in range(len(self.solutions_affichees)) :
+       self.solution[etat_changer].coleur = QtGui.QBrush(QtCore.Qt.cyan)
+       self.solution[etat_changer].actualiser_coleur()
+       self.solutions_affichees[etat_changer] = 1 
+
+  def afficher_solution(self):
+   self.solutions_affichees = []
+   for etat in range(len(self.solution)):
+     self.solutions_affichees.append(0)
+   for etat in self.solution:
+       etat.coleur  = QtGui.QBrush(QtCore.Qt.gray)
+
 def main():
 ############# PREMIER TEST
 ####### A ORGANISER SUR  UN FICHIER TEST 
@@ -172,6 +186,7 @@ def main():
   autom.ajoute_initial(etat3)
   autom.ajoute_final(etat4)
   autom.transition[etat3] = {}
+
   autom.transition[etat0] = {}
   autom.transition[etat1] = {}
   autom.ajoute_transition(etat3,etat0,'a')
@@ -186,12 +201,12 @@ def main():
   visualisation_graphe.show()
 
 
-
 #  executer = execution(autom)
 #  self.solut = executer.solution("abcd")
 #  print(self.solut)
 
-  solut = (graphe.etats[0],graphe.etats[1])
+#  solut = (graphe.etats[0],graphe.etats[1])
+  solut = (etat3,etat0,etat1,etat2)
   graphe.solution = solut
 
   button = QtGui.QPushButton("Afficher la solution")
