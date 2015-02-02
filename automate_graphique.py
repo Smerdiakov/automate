@@ -132,7 +132,6 @@ class Graphe(QtGui.QGraphicsScene):
        self.fleches.append(dessin_transition)
        self.addItem(dessin_transition)
 
-
 ################ Fonctions pour afficher la solution
 ##### animations, etc.
 ##### apres l'execution du methode 'execution' de execute.py
@@ -140,23 +139,33 @@ class Graphe(QtGui.QGraphicsScene):
   ##### Remplacer ce button par un button dans la fenetre
   def creer_buttons_solution(self):
     button = QtGui.QGraphicsRectItem(0,0,20,40)
-    button.setAcceptHoverEvents(False)
-    self.addItem(button)  
+    texte = QtGui.QGraphicsSimpleTextItem("Remplacer ce button par deux buttons dans la fenetre")
+    #button.setAcceptHoverEvents(False)
+    self.addItem(button)
+    self.addItem(texte) 
 
   ##### Remplacer cette interaction avec la souris par un button dans la fenetre  
   def mouseDoubleClickEvent(self,e):
     e.accept()
+    # etat_changer est l'indice de l'actuel etat dont la coleur sera modifiee
     etat_changer = 0
     assert(len(self.solution) == len(self.solutions_affichees))
+    # si solution[etat_changer] a ete deja modifie, alors solutions_affiches[etat_changer] = 1
+    # sinon solution_affiches[etat_changer] = 0
+  
     while self.solutions_affichees[etat_changer] == 1 :
+    # cherche le prochaine etat a modifier
       etat_changer += 1
       if etat_changer not in range(len(self.solutions_affichees)) :
+      # si o a atteint la fin de la liste des etats de la solution
         break
     if etat_changer  in range(len(self.solutions_affichees)) :
+    # modifier la coleur
        self.solution[etat_changer].coleur = QtGui.QBrush(QtCore.Qt.cyan)
        self.solution[etat_changer].actualiser_coleur()
        self.solutions_affichees[etat_changer] = 1 
 
+  # prepare la nouvelle coleur et la liste de" controle des etats deja affiches
   def afficher_solution(self):
    self.solutions_affichees = []
    for etat in range(len(self.solution)):
@@ -215,7 +224,6 @@ def main():
   button.clicked.connect(graphe.afficher_solution)
 
   sys.exit(application.exec_())
-
 
 
 if __name__ == '__main__':

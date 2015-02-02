@@ -45,13 +45,18 @@ class test_automate_graphique (unittest.TestCase):
     self.autom.ajoute_transition(self.etat6,self.etat6,'i')
     self.autom.ajoute_transition(self.etat6,self.etat2,'')
 
+
+ 
+ 
     application = QtGui.QApplication(sys.argv)
 
     self.graphe = Graphe(self.autom,500)
+    self.graphe.solution = (self.etat0,self.etat3,self.etat5,self.etat6,self.etat2)
+    self.graphe.afficher_solution()  
     visualisation_graphe = QtGui.QGraphicsView(self.graphe)
     visualisation_graphe.show()
 
-#    sys.exit(application.exec_())
+    sys.exit(application.exec_())
 
 
   def test_organiser_etats(self):
@@ -92,9 +97,6 @@ class test_automate_graphique (unittest.TestCase):
       complementaire = coordonnees
       complementaire.remove(coord) #seuleument la premiere fois que l'element apparaitre
       self.assertNotIn(coord,complementaire)
-
-  def test_placer_fleches(self):
-    self.assertEqual(len(self.graphe.fleches),len(self.graphe.transition.keys()))
 
 
 if __name__=="__main__":
