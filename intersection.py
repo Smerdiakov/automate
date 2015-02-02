@@ -55,6 +55,11 @@ def etats_produits(liste_etats_1,liste_etats_2):
 
 # l'intersection de deux liste :	
 def intersection (liste1, liste2):
+	liste_inter = []
+	for element in liste1:
+		if element in liste2:
+			liste_inter.append(element)
+	return liste_inter
 
 # image d'un couple d'état :
 def image(etat1, auto1, etat2,auto2, lettre):
