@@ -63,7 +63,6 @@ class test_union(unittest.TestCase):
 		for test in range(longueur_mots):
 			liste = liste_bits_alea(longueur_mots)
 			mot = mot_alea(liste)
-			nombre = nombre_de_zeros_mod_3(liste)
 			
 			execut_det = execution(auto_det)
 			execut_det.execute(mot)
