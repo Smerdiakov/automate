@@ -62,7 +62,13 @@ def intersection (liste1, liste2):
 	return liste_inter
 
 # image d'un couple d'état :
-def image(etat1, auto1, etat2,auto2, lettre):
+def image(etat1, auto1, etat2, auto2, lettre):
+	liste1 = auto1.image(etat1, lettre)
+	liste2 = auto2.image(etat2, lettre)
+	return produit_carthesien( liste1, liste2)
+	
+# produit carthésien de 2 listes :
+def produit_carthesien( liste1, liste2):
 
 # gestion des etats initiaux :
 def gestion_initiaux(auto_produit, auto1, auto2):
