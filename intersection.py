@@ -46,6 +46,12 @@ def inter (auto1, auto2):
 	
 # creation des etats de l'automate produit :
 def etats_produits(liste_etats_1,liste_etats_2):
+	auto_produit = automate()
+	for etat1 in liste_etats_1:
+		for etat2 in liste_etats_2:
+			auto_produit.ajoute_etat((etat1,etat2))
+	return auto_produit
+			
 
 # l'intersection de deux liste :	
 def intersection (liste1, liste2):
