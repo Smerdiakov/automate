@@ -12,7 +12,7 @@ from union import *
 import unittest
 import random
 
-longueur_mots = 100;
+longueur_mots = 400;
 
 # transforme la liste de bits en mot avec les lettres a et b.
 def mot_alea (liste_bits):

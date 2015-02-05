@@ -69,9 +69,20 @@ def image(etat1, auto1, etat2, auto2, lettre):
 	
 # produit carthésien de 2 listes :
 def produit_carthesien( liste1, liste2):
+	liste_produit = []
+	for element1 in liste1 :
+		for element2 in liste2:
+			liste_produit.append((element1,element2))
+	return liste_produit
 
 # gestion des etats initiaux :
 def gestion_initiaux(auto_produit, auto1, auto2):
+	for etat1 in auto1.initial:
+		for etat2 in auto2.initial:
+			auto_produit.ajoute_initial((etat1, etat2))
 
 # gestion des etats finaux :
 def gestion_finaux(auto_produit, auto1, auto2):
+	for etat1 in auto1.final:
+		for etat2 in auto2.final:
+			auto_produit.ajoute_final((etat1, etat2))
