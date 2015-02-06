@@ -20,7 +20,7 @@ class Transition(QtGui.QGraphicsItemGroup):
 
     self.depart = etat_initial
     self.arrivee = etat_final
- 
+
     self.dessiner_fleche()
 
   def dessiner_fleche(self):
@@ -206,7 +206,7 @@ class Etat(QtGui.QGraphicsItemGroup):
                             self.position_externe_x,self.position_externe_y,\
                             self.diametre,self.diametre))
     self.cercle_ext.setBrush(self.coleur)
-    self.cercle_ext.setOpacity(0.3)
+    self.cercle_ext.setOpacity(1.)
     self.cercle_ext.setAcceptHoverEvents(True)
     self.addToGroup(self.cercle_ext)
   
@@ -216,7 +216,7 @@ class Etat(QtGui.QGraphicsItemGroup):
                               self.position_interne_x,self.position_interne_y,\
                               .9*self.diametre,.9*self.diametre))
       self.cercle_int.setBrush(self.coleur)
-      self.cercle_int.setOpacity(0.2)
+      self.cercle_int.setOpacity(1.)
       self.addToGroup(self.cercle_int)
 
     self.texte = QtGui.QGraphicsSimpleTextItem(self.etiquette)

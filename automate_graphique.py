@@ -95,8 +95,8 @@ class Graphe(QtGui.QGraphicsScene):
                        etat.position_initial_x = max([etat.position_initial_x,
                                                      precedent.position_initial_x + \
                                                      self.distance_etats + \
-                                                     (1.5+(-1)**etat.niveau_graphe)*\
-                                                     0.5*self.diametre_etat*(etat.niveau_graphe-1)])
+                                                     (2.0+(-1)**etat.niveau_graphe)*\
+                                                     1.0*self.diametre_etat])
                                                      #eviter des intersections entre fleches etats
                        nombre_etats_niveau = len(self.successeurs_etat[precedent]) 
                        if nombre_etats_niveau == 1:
@@ -107,7 +107,7 @@ class Graphe(QtGui.QGraphicsScene):
                                                     (-1)**(self.successeurs_etat[precedent].index(etat))*\
                                                     (int(nombre_etats_niveau/2)) +\
                                                     (0+(-1)**etat.niveau_graphe)*\
-                                                    0.5*self.diametre_etat*(etat.niveau_graphe-1)
+                                                    0.5*self.diametre_etat*(2-etat.niveau_graphe + etat.niveau_graphe-1)
                                                     #eviter des intersections entre fleches etats
                    etat.actualiser_geometrie() 
                else:
@@ -130,7 +130,12 @@ class Graphe(QtGui.QGraphicsScene):
        [arrivee] = self.automate.image(depart,lettre)
        dessin_transition = Transition(depart,arrivee,lettre)
        self.fleches.append(dessin_transition)
-       self.addItem(dessin_transition)
+       if (depart == arrivee):
+         self.removeItem(depart)
+         self.addItem(dessin_transition)
+         self.addItem(depart)
+       else:
+         self.addItem(dessin_transition)
 
 ################ Fonctions pour afficher la solution
 ##### animations, etc.
