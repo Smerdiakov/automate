@@ -43,6 +43,9 @@ class test_automate_graphique (unittest.TestCase):
     self.autom.ajoute_transition(self.etat5,self.etat4,'g')
     self.autom.ajoute_transition(self.etat5,self.etat6,'h')
     self.autom.ajoute_transition(self.etat6,self.etat6,'i')
+    self.autom.ajoute_transition(self.etat4,self.etat5,'j')
+    self.autom.ajoute_transition(self.etat1,self.etat0,'k')
+    self.autom.ajoute_transition(self.etat4,self.etat6,'l')
     self.autom.ajoute_transition(self.etat6,self.etat2,'')
 
 
@@ -51,7 +54,7 @@ class test_automate_graphique (unittest.TestCase):
     application = QtGui.QApplication(sys.argv)
 
     self.graphe = Graphe(self.autom,500)
-    self.graphe.solution = (self.etat0,self.etat3,self.etat5,self.etat6,self.etat2)
+    self.graphe.solution = (self.etat0,self.etat1,self.etat0,self.etat3,self.etat5,self.etat6,self.etat2)
     self.graphe.afficher_solution()  
     visualisation_graphe = QtGui.QGraphicsView(self.graphe)
     visualisation_graphe.show()

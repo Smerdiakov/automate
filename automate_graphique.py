@@ -75,6 +75,15 @@ class Graphe(QtGui.QGraphicsScene):
       etat.position_initial_y = self.taille/2
       etat.actualiser_geometrie()
 
+ 
+    ## verifier s'il y a des fleches d'aller-retour et supprimer la reference bouclee dans les dictionnaires de precedents et successeurs
+    # sinon la boucle de placement ne sera jamais terminee
+    for etat in self.precedents_etat.keys():
+     if etat not in self.automate.initial:
+      for precedent in self.precedents_etat[etat]:
+        if etat in self.precedents_etat[precedent]:
+          self.precedents_etat[precedent].remove(etat)
+
     ## Boucle de modification de la position (x,y) de tous les etats
     # Un etat peut etre place ssi tous ses precedents on deja ete places
     placement_fini = False
@@ -136,7 +145,11 @@ class Graphe(QtGui.QGraphicsScene):
          self.addItem(depart)
        else:
          self.addItem(dessin_transition)
-
+    ## transition fictice por creer la fleche d'entree de l'automate
+    for etat in self.automate.initial:
+       dessin_transition = Transition(0,etat," ")
+       self.fleches.append(dessin_transition)     
+       self.addItem(dessin_transition)
 ################ Fonctions pour afficher la solution
 ##### animations, etc.
 ##### apres l'execution du methode 'execution' de execute.py

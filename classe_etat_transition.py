@@ -30,6 +30,7 @@ class Transition(QtGui.QGraphicsItemGroup):
      self.font  = QtGui.QFont("Arial",14)
 
      if self.lettre == "":
+       self.style_ligne.setStyle(QtCore.Qt.DashLine)
        self.lettre = "ε"
      self.texte_fleche = QtGui.QGraphicsSimpleTextItem(self.lettre)
 
@@ -65,7 +66,7 @@ class Transition(QtGui.QGraphicsItemGroup):
 
       # texte de la fleche
       position_texte_x = etat.centre_x
-      position_texte_y = etat.centre_y - 1.5*etat.diametre
+      position_texte_y = etat.centre_y - .9*etat.diametre
       self.texte_fleche.setPos(position_texte_x,position_texte_y)
 
   def dessiner_fleche_droite(self,geometrie_droite):    
@@ -81,9 +82,9 @@ class Transition(QtGui.QGraphicsItemGroup):
 
       # texte de la fleche
       position_texte_x = 0.5*(geometrie_droite[0] + geometrie_droite[2]) +\
-                         20*cos(inclination+pi/2)
+                         25*cos(inclination+pi/2)
       position_texte_y =  0.5*(geometrie_droite[1] + geometrie_droite[3]) +\
-                         20*sin(inclination+pi/2)
+                         (25 - 15*(int(cos(inclination) > 0))) *sin(inclination+pi/2)
       self.texte_fleche.setPos(position_texte_x,position_texte_y)
 
 
@@ -107,24 +108,35 @@ class Transition(QtGui.QGraphicsItemGroup):
                                             tete_final_x_2,tete_final_y_2)
 
   def calculer_droite(self,etat_initial,etat_final):
+    
     geometrie = []
-    if etat_final.centre_x == etat_initial.centre_x:
-      inclination = pi/2.
-    else:
-      inclination = atan((etat_final.centre_y - etat_initial.centre_y)/ \
-                             (etat_final.centre_x - etat_initial.centre_x))
-    if etat_final.centre_x < etat_initial.centre_x:
-      inclination = inclination + pi
+ 
+    if etat_initial != 0: # il ne s'agit pas de la fleche d'entree de l'automate
+      if etat_final.centre_x == etat_initial.centre_x:
+        inclination = pi/2.
+      else:
+        inclination = atan((etat_final.centre_y - etat_initial.centre_y)/ \
+                               (etat_final.centre_x - etat_initial.centre_x))
+      if etat_final.centre_x < etat_initial.centre_x:
+        inclination = inclination + pi
 
-    geometrie.append(etat_initial.centre_x + \
-                     etat_initial.diametre/2 * cos(inclination)) #x_initial
-    geometrie.append(etat_initial.centre_y + \
-                     etat_initial.diametre/2 * sin(inclination)) #y_initial
-    geometrie.append(etat_final.centre_x + \
-                     etat_final.diametre/2 * cos(inclination + pi)) #x_final
-    geometrie.append(etat_final.centre_y + \
-                     etat_final.diametre/2 * sin(inclination + pi)) #y_final
-    geometrie.append(inclination)
+      geometrie.append(etat_initial.centre_x + \
+                       etat_initial.diametre/2 * cos(inclination)) #x_initial
+      geometrie.append(etat_initial.centre_y + \
+                       etat_initial.diametre/2 * sin(inclination)) #y_initial
+      geometrie.append(etat_final.centre_x + \
+                       etat_final.diametre/2 * cos(inclination + pi)) #x_final
+      geometrie.append(etat_final.centre_y + \
+                       etat_final.diametre/2 * sin(inclination + pi)) #y_final
+      geometrie.append(inclination)
+ 
+    else: 
+      inclination = 0
+      geometrie.append(etat_final.centre_x - 3*etat_final.diametre/2)
+      geometrie.append(etat_final.centre_y)
+      geometrie.append(etat_final.centre_x - etat_final.diametre/2)
+      geometrie.append(etat_final.centre_y) #y_final
+      geometrie.append(inclination)
 
     return geometrie
 
