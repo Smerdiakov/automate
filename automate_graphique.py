@@ -33,7 +33,6 @@ class Graphe(QtGui.QGraphicsScene):
     self.placer_etats()
     self.placer_fleches()
 
-    self.creer_buttons_solution()
     self.solution = [] #a definir
     self.solutions_affichees = []
 ######### Fonctions de traitement des etats
@@ -154,13 +153,6 @@ class Graphe(QtGui.QGraphicsScene):
 ##### animations, etc.
 ##### apres l'execution du methode 'execution' de execute.py
 
-  ##### Remplacer ce button par un button dans la fenetre
-  def creer_buttons_solution(self):
-    button = QtGui.QGraphicsRectItem(0,0,20,40)
-    texte = QtGui.QGraphicsSimpleTextItem("Remplacer ce button par deux buttons dans la fenetre")
-    #button.setAcceptHoverEvents(False)
-    self.addItem(button)
-    self.addItem(texte) 
 
   ##### Remplacer cette interaction avec la souris par un button dans la fenetre  
   def mouseDoubleClickEvent(self,e):
