@@ -165,6 +165,9 @@ class Graphe(QtGui.QGraphicsScene):
       # si o a atteint la fin de la liste des etats de la solution
         break
     if etat_changer  in range(len(self.solutions_affichees)) :
+       for etat in self.etats:
+          etat.coleur = QtGui.QBrush(QtCore.Qt.gray)
+          etat.actualiser_coleur() 
     # modifier la coleur
        self.solution[etat_changer].coleur = QtGui.QBrush(QtCore.Qt.cyan)
        self.solution[etat_changer].actualiser_coleur()
